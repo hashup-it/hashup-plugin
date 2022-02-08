@@ -1,9 +1,13 @@
 import { Card } from "../../../../Components/Panels/Card";
 import { Text } from '@chakra-ui/react';
+import { useBlockchainProvider } from "../../../../Providers/Blockchain/BlockchainProvider";
 
-export const HashupCard = () => (
-    <Card>
-        <Text>Your hash</Text>
-        <Text variant="primary">54,155.2521</Text>
-    </Card>
-)
+export const HashupCard = () => {
+    const { balance } = useBlockchainProvider();
+    return (
+        <Card>
+            <Text>Your hash</Text>
+            <Text variant="primary">{balance}</Text>
+        </Card>
+    )
+}

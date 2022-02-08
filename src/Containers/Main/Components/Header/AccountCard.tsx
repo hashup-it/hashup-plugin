@@ -1,10 +1,14 @@
 import { Card } from "../../../../Components/Panels/Card"
 import { Text } from '@chakra-ui/react';
 import { HashupAvatar } from "./HashupAvatar";
+import { useBlockchainProvider } from "../../../../Providers/Blockchain/BlockchainProvider";
 
-export const AccountCard = ({ onCollapse }: { onCollapse: () => void }) => (
-    <Card rightIcon={<HashupAvatar onCollapse={onCollapse} />}>
-        <Text variant="primary">JuliaDlugiTekst</Text>
-        <Text>0x1552...532d</Text>
-    </Card>
-);
+export const AccountCard = ({ onCollapse }: { onCollapse: () => void }) => {
+    const { account } = useBlockchainProvider();
+    return (
+        <Card rightIcon={<HashupAvatar onCollapse={onCollapse} />}>
+            <Text variant="primary">Szymon</Text>
+            <Text isTruncated w="100px">{account}</Text>
+        </Card>
+    );
+}

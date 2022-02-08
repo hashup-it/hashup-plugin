@@ -1,7 +1,8 @@
-import { Button, Center, chakra, Container, Grid, HStack, Link, SimpleGrid, SystemStyleObject, Text, useStyleConfig, VStack } from "@chakra-ui/react";
+import { Button, Center, chakra, Container, Grid, HStack, Link, SimpleGrid, SystemStyleObject, Text, Tooltip, useStyleConfig, VStack } from "@chakra-ui/react";
 import { MetamaskIcon } from "../../../Components/Icons/MetamaskIcon";
 import { useReflink } from "../../../Hooks/useReflink";
 import { useBlockchainProvider } from "../../../Providers/Blockchain/BlockchainProvider";
+import { useGame } from "../../../Providers/GameProvider/GameProvider";
 
 const containerStyles: SystemStyleObject = {
     d: 'grid',
@@ -15,18 +16,21 @@ const containerStyles: SystemStyleObject = {
 }
 
 export const AdditionalPanel = () => {
-    const { copyReflink } = useReflink();
-    const { addHashToMetamask } = useBlockchainProvider();
+    const { copyReflink, hasCopied } = useReflink();
+    const { game } = useGame();
+    const { addTokenToMetamask } = useBlockchainProvider();
 
     return (
         <chakra.div __css={containerStyles}>
-            <Button gridArea="referral" flexDir="column" textTransform="uppercase" onClick={copyReflink}>
-                Copy referral<br />
-                <Text textTransform="none" color="black" fontSize="sm">Earn <Text as="span" color="white">2%</Text> on every transaction</Text>
-            </Button>
-            <Button gridArea="gamexplorer" variant="outline" textTransform="uppercase">Gamexplorer</Button>
-            <Button onClick={addHashToMetamask} gridArea="addToMetamask" as={Link} leftIcon={<MetamaskIcon />} textTransform="uppercase" variant="ghost">
-                Add&nbsp;<Text color="red">2047</Text>&nbsp;to your wallet
+            <Tooltip label='Copied' isOpen={hasCopied}>
+                <Button gridArea="referral" flexDir="column" textTransform="uppercase" onClick={copyReflink}>
+                    Copy referral<br />
+                    <Text textTransform="none" color="black" fontSize="sm">Earn <Text as="span" color="white">2%</Text> on every transaction</Text>
+                </Button>
+            </Tooltip>
+            <Button as={Link} href="https://gamexplorer.io" isExternal gridArea="gamexplorer" variant="outline" textTransform="uppercase">Gamexplorer</Button>
+            <Button onClick={addTokenToMetamask} gridArea="addToMetamask" leftIcon={<MetamaskIcon />} textTransform="uppercase" variant="ghost">
+                Add&nbsp;<Text color="red">{game.symbol}</Text>&nbsp;to your wallet
             </Button>
         </chakra.div>
     );

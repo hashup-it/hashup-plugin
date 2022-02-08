@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.5.8",
     "@chakra-ui/react": "^1.8.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
@@ -11,7 +12,9 @@
     "@types/node": "^16.7.13",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
+    "cross-env": "^7.0.3",
     "ethers": "^5.5.4",
+    "graphql": "^16.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
@@ -19,8 +22,8 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "REACT_APP_ENV=dev CARTRIDGE=0xe5A7c731e25db8dBEA56680C0f83DC204fC20576 react-scripts start",
-    "build": "REACT_APP_ENV=dev react-scripts build",
+    "start": "cross-env react-scripts start",
+    "build": "cross-env react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

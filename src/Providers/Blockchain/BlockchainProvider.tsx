@@ -1,5 +1,7 @@
+import React from 'react';
 import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
+import { useQuery, useLazyQuery, gql } from '@apollo/client';
 import { BlockchainWeb3InitialState, BlockchainWeb3Reducer } from './blockchainReducer';
 import { chainIdtoName, getAccounts, isMetaMask, isWeb3, loginToMetaMask, networkChainParams } from './web3-utils';
 import HashContract from '../../Contracts/Hash/contract';
@@ -9,10 +11,12 @@ import Nicknames from '../../Contracts/Nicknames/nicknames.json';
 import GamerProfile from '../../Contracts/GamerProfile/gamerProfile.json';
 import { envVariables } from "../../env";
 import { useToast } from '@chakra-ui/react'
-import React from 'react';
+import { getGame } from '../../Graphql/queries';
+import { useGame } from '../GameProvider/GameProvider';
 
 export const BlockchainProvider = ({ children }: any) => {
-	const toast = useToast()
+	const toast = useToast();
+	const { game } = useGame();
 	const [isCheckOfWeb3, handleIsCheckedWeb3] = useState(false);
 	const [isLoadingBuyGame, handleIsLoadingBuyGame] = useState(false);
 	const [web3State, web3Dispatch] = useReducer(BlockchainWeb3Reducer, BlockchainWeb3InitialState) as any;
@@ -31,8 +35,7 @@ export const BlockchainProvider = ({ children }: any) => {
 		[web3State.signer],
 	);
 
-	const addHashToMetamask = useCallback(async () => {
-		const tokenSymbol = 'Hash';
+	const addTokenToMetamask = useCallback(async () => {
 		const tokenDecimals = 18;
 		const tokenImage = 'https://i.ibb.co/QrPpyW3/icon-metamask.png';
 		await (window as any).ethereum.request({
@@ -40,18 +43,17 @@ export const BlockchainProvider = ({ children }: any) => {
 			params: {
 				type: 'ERC20',
 				options: {
-					address: HashAddress,
-					symbol: tokenSymbol,
-					decimals: tokenDecimals,
-					image: tokenImage,
+					address: game.id,
+					symbol: game.symbol,
+					decimals: tokenDecimals, // @TODO: fix
+					image: game?.media?.logo,
 				},
 			},
 		});
-	}, []);
+	}, [game]);
 
     const buyGame = useCallback(
 		async ({ amount, cartridgeAddress }: { amount: string | number; cartridgeAddress: string }) => {
-			// const cartridgeAddress = '0xDc61F0d9f9536E14887053e12FF8bc32346D3769';
 			handleIsLoadingBuyGame(true);
 			const tokenPrice = await igoContract.getPrice(cartridgeAddress.toString(), envVariables.hashAddress);
 			const buyToken = await igoContract.getBuyTokenForCartridge(cartridgeAddress.toString());
@@ -276,7 +278,7 @@ export const BlockchainProvider = ({ children }: any) => {
 				isLogged: web3State.isLogged,
 				login,
 				isWeb3: web3State.isWeb3,
-				addHashToMetamask,
+				addTokenToMetamask,
 				buyGame,
 				account: web3State.account,
 				loading: web3State.loading,
@@ -300,7 +302,7 @@ const BlockchainContext = React.createContext({
 	isLoadingBuyGame: false,
 	balance: 0,
 	login: () => {},
-	addHashToMetamask: () => {},
+	addTokenToMetamask: () => {},
 	buyGame: ({ amount, cartridgeAddress }: { amount: string | number; cartridgeAddress: string }) => {},
 	hashContract: null as any,
 	nicknamesContract: null as any,

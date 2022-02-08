@@ -1,5 +1,6 @@
 import { chakra, HStack, SystemStyleObject, Text, theme } from "@chakra-ui/react";
 import { InfoIcon } from "../../../Components/Icons/InfoIcon";
+import { useGame } from "../../../Providers/GameProvider/GameProvider";
 
 const containerStyles: SystemStyleObject = {
     w: "100%",
@@ -8,14 +9,17 @@ const containerStyles: SystemStyleObject = {
     bg: theme.colors.black,
 }
 
-export const Footer = () => (
-    <HStack __css={containerStyles}>
-        <Text>
-            Available: <chakra.strong>0.3</chakra.strong> <chakra.span color="red">PONG</chakra.span>
-        </Text>
+export const Footer = () => {
+    const { game } = useGame();
+    return (
+        <HStack __css={containerStyles}>
+            <Text>
+                Available: <chakra.strong>0</chakra.strong> <chakra.span color="red">{game.symbol}</chakra.span>
+            </Text>
 
-        <Text fontWeight="600">
-            <InfoIcon /> To play the game, you must own at least 1 game
-        </Text>
-    </HStack>
-)
+            <Text fontWeight="600">
+                <InfoIcon /> To play the game, you must own at least 1 game
+            </Text>
+        </HStack>
+    )
+}
