@@ -16,12 +16,12 @@ export const button = {
             backgroundColor: theme.colors.red[500],
         },
         outline: {
-            color: 'white',
+            color: theme.colors.white,
             borderColor: theme.colors.red[500],
             borderWidth: '2px'
         },
         ghost: {
-            color: 'white',
+            color: theme.colors.white,
         }
     }
 }

@@ -1,5 +1,6 @@
 import { Avatar, Button, chakra, Input, InputGroup, InputRightElement, Heading, HStack, SystemStyleObject, Tag, Text, useStyleConfig, VStack, Square, InputLeftElement, Select, Grid, Box } from "@chakra-ui/react";
 import { Card } from "../../../Components/Panels/Card";
+import { useBlockchainProvider } from "../../../Providers/Blockchain/BlockchainProvider";
 
 const styles: SystemStyleObject = {
     bg: '#21242B',
@@ -8,7 +9,9 @@ const styles: SystemStyleObject = {
     p: '1.75rem 1.5rem',
 }
 
-export const Body = () => (
+export const Body = () => {
+    const { addHashToMetamask } = useBlockchainProvider();
+    return (
     <VStack __css={styles}>
         <HStack w="100%" justifyContent="space-between" mb="2rem">
             <Card leftIcon={<Avatar size="lg" />}>
@@ -40,4 +43,5 @@ export const Body = () => (
             </InputGroup>
         </Grid>
     </VStack>
-);
+    )
+};

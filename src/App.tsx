@@ -1,23 +1,20 @@
 import './App.css';
-import { Button, ButtonGroup, ChakraProvider, ColorModeProvider, IconButton, Image, theme, ThemeProvider, VStack } from '@chakra-ui/react';
+import { ChakraProvider, VStack } from '@chakra-ui/react';
 import { chakraTheme } from './Theme/chakraTheme';
 import { Main } from './Containers/Main/Main';
-import { AdditionalPanel } from './Containers/AdditionalPanel/AdditionalPanel';
-import { CloseButton } from './Components/Buttons/CloseButton';
-import { Navigation } from './Containers/Navigation/Navigation';
 import { Fonts } from './Theme/Fonts';
+import { BlockchainProvider } from './Providers/Blockchain/BlockchainProvider';
 
 function App() {
   return (
-    <ChakraProvider theme={chakraTheme}>
-      <Fonts />
-      <VStack spacing="0" w="400px">
-        <Main />
-        <AdditionalPanel />
-        <Navigation />
-      </VStack>
-      {/* <Image src="/static/logo.svg" alt="logo" /> */}
-    </ChakraProvider>
+    <BlockchainProvider>
+      <ChakraProvider theme={chakraTheme}>
+        <Fonts />
+        <VStack spacing="0" w="400px">
+          <Main />
+        </VStack>
+      </ChakraProvider>
+    </BlockchainProvider>
   );
 }
 
