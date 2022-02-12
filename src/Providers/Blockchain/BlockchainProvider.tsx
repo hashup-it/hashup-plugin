@@ -1,7 +1,6 @@
 import React from 'react';
 import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
-import { useQuery, useLazyQuery, gql } from '@apollo/client';
 import { BlockchainWeb3InitialState, BlockchainWeb3Reducer } from './blockchainReducer';
 import { chainIdtoName, getAccounts, isMetaMask, isWeb3, loginToMetaMask, networkChainParams } from './web3-utils';
 import HashContract from '../../Contracts/Hash/contract';
@@ -11,7 +10,6 @@ import Nicknames from '../../Contracts/Nicknames/nicknames.json';
 import GamerProfile from '../../Contracts/GamerProfile/gamerProfile.json';
 import { envVariables } from "../../env";
 import { useToast } from '@chakra-ui/react'
-import { getGame } from '../../Graphql/queries';
 import { useGame } from '../GameProvider/GameProvider';
 
 export const BlockchainProvider = ({ children }: any) => {
@@ -37,7 +35,7 @@ export const BlockchainProvider = ({ children }: any) => {
 
 	const addTokenToMetamask = useCallback(async () => {
 		const tokenDecimals = 18;
-		const tokenImage = 'https://i.ibb.co/QrPpyW3/icon-metamask.png';
+		// const tokenImage = 'https://i.ibb.co/QrPpyW3/icon-metamask.png';
 		await (window as any).ethereum.request({
 			method: 'wallet_watchAsset',
 			params: {
@@ -308,6 +306,7 @@ const BlockchainContext = React.createContext({
 	balance: 0,
 	login: () => {},
 	addTokenToMetamask: () => {},
+	// @ts-ignore
 	buyGame: ({ amount, cartridgeAddress }: { amount: string | number; cartridgeAddress: string }) => {},
 	hashContract: null as any,
 	nicknamesContract: null as any,

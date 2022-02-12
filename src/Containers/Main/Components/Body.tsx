@@ -1,4 +1,4 @@
-import { Avatar, Button, chakra, Input, InputGroup, InputRightElement, Heading, HStack, SystemStyleObject, Tag, Text, useStyleConfig, VStack, Square, InputLeftElement, Select, Grid, Box } from "@chakra-ui/react";
+import { Avatar, Button, Input, InputGroup, InputRightElement, Heading, HStack, SystemStyleObject, Tag, Text, VStack, Square, InputLeftElement, Select, Grid, Box } from "@chakra-ui/react";
 import { Card } from "../../../Components/Panels/Card";
 import { useBlockchainProvider } from "../../../Providers/Blockchain/BlockchainProvider";
 import { useGame } from "../../../Providers/GameProvider/GameProvider";
@@ -11,7 +11,7 @@ const styles: SystemStyleObject = {
 }
 
 export const Body = () => {
-    const { addTokenToMetamask, buyGame } = useBlockchainProvider();
+    const { buyGame } = useBlockchainProvider();
     const { game } = useGame();
     return (
         <VStack __css={styles}>

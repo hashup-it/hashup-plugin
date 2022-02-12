@@ -1,4 +1,4 @@
-import { Button, Center, chakra, Container, Grid, HStack, Link, SimpleGrid, SystemStyleObject, Text, Tooltip, useStyleConfig, VStack } from "@chakra-ui/react";
+import { Button, chakra, Link, SystemStyleObject, Text, Tooltip } from "@chakra-ui/react";
 import { MetamaskIcon } from "../../../Components/Icons/MetamaskIcon";
 import { useReflink } from "../../../Hooks/useReflink";
 import { useBlockchainProvider } from "../../../Providers/Blockchain/BlockchainProvider";

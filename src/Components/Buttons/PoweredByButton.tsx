@@ -1,4 +1,4 @@
-import { Button, ButtonProps, forwardRef, IconButton, IconButtonProps, IconProps, SystemStyleObject, useStyleConfig } from "@chakra-ui/react";
+import { Button, ButtonProps, forwardRef, SystemStyleObject, useStyleConfig } from "@chakra-ui/react";
 import { HashupIcon } from "../Icons/HashupIcon";
 
 export const PoweredByButton = forwardRef<ButtonProps, "button">(({ variant, size, ...rest }, ref) => {

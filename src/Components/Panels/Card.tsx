@@ -1,5 +1,4 @@
-import Icon from "@chakra-ui/icon";
-import { BoxProps, forwardRef, HStack, IconProps, VStack } from "@chakra-ui/react";
+import { BoxProps, forwardRef, HStack, VStack } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 export const Card = forwardRef<BoxProps & { leftIcon?: ReactNode, rightIcon?: ReactNode }, "div">(({ children, leftIcon, rightIcon, ...rest }, ref) => (

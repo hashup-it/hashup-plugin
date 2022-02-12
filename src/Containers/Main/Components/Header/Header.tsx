@@ -1,5 +1,4 @@
-import { forwardRef, HStack, StackProps, SystemStyleObject, theme } from "@chakra-ui/react"
-import { ReactNode } from "react"
+import { forwardRef, HStack, StackProps, theme } from "@chakra-ui/react"
 import { HashupIcon } from "../../../../Components/Icons/HashupIcon";
 
 export const Header = forwardRef<StackProps, "div">(({ children, ...rest }, ref) => (

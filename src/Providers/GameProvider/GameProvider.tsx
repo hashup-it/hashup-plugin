@@ -4,7 +4,7 @@ import { Game } from "../../Graphql/api";
 import { getGame } from "../../Graphql/queries";
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
-	const { data, loading } = useQuery(gql`${getGame}`, { variables: { id: process.env.REACT_APP_CARTRIDGE }});
+	const { data } = useQuery(gql`${getGame}`, { variables: { id: process.env.REACT_APP_CARTRIDGE }});
 	return (
 		<GameContext.Provider
 			value={{

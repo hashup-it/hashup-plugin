@@ -1,4 +1,3 @@
-import './App.css';
 import { ChakraProvider, VStack } from '@chakra-ui/react';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { chakraTheme } from './Theme/chakraTheme';

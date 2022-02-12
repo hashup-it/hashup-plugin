@@ -1,4 +1,4 @@
-import { VStack, Text, chakra } from "@chakra-ui/react"
+import { VStack, chakra } from "@chakra-ui/react"
 import { EXPANSION_MODE } from "../../Hooks/expansionMode.enum"
 import { Navigation } from "./Components/Navigation"
 import { AdditionalPanel } from "./Components/AdditionalPanel"
@@ -12,6 +12,7 @@ import { WalletIcon } from "../../Components/Icons/WalletIcon"
 import { useBlockchainProvider } from "../../Providers/Blockchain/BlockchainProvider"
 
 const options: any = {
+    // @ts-ignore
     [EXPANSION_MODE.DISCONNECTED]: (props: ExpansionProps) => {
       const { login } = useBlockchainProvider();
       return (

@@ -1,4 +1,3 @@
-import Icon from "@chakra-ui/icon";
 import { forwardRef, IconProps } from "@chakra-ui/react";
 import { DownIcon } from "./DownIcon";
 
