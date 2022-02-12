@@ -55,10 +55,13 @@ export const BlockchainProvider = ({ children }: any) => {
     const buyGame = useCallback(
 		async ({ amount, cartridgeAddress }: { amount: string | number; cartridgeAddress: string }) => {
 			handleIsLoadingBuyGame(true);
-			const tokenPrice = await igoContract.getPrice(cartridgeAddress.toString(), envVariables.hashAddress);
-			const buyToken = await igoContract.getBuyTokenForCartridge(cartridgeAddress.toString());
 
-			const erc20 = new ethers.Contract(buyToken, HashContract, web3State.signer);
+			const buyToken = await igoContract.getBuyTokenForCartridge(cartridgeAddress.toString())
+			const tokenPrice = await igoContract.getPrice(cartridgeAddress.toString(), buyToken);
+
+			console.warn(tokenPrice, ethers.utils.formatEther(tokenPrice), buyToken);
+
+			const erc20 = new ethers.Contract(buyToken, HashContract, web3State.signer); // TODO: not always HashContract
 
 			if (!tokenPrice || !buyToken) {
 				handleIsLoadingBuyGame(false);
@@ -191,7 +194,8 @@ export const BlockchainProvider = ({ children }: any) => {
 	useEffect(() => {
 		(async () => {
 			if (web3State.provider && web3State.account !== BlockchainWeb3InitialState.account) {
-				const walletBalance = await web3State.provider.getBalance(web3State.account);
+				const walletBalance = await hashContract.balanceOf(web3State.account);
+				// await web3State.provider.getBalance(web3State.account);
 				const balance = ethers.utils.formatEther(walletBalance);
 				dispatch({ type: 'SET_balance', balance });
 			} else {
@@ -207,7 +211,8 @@ export const BlockchainProvider = ({ children }: any) => {
 	useEffect(() => {
 		if (web3State.provider) {
 			const updateBalance = async () => {
-				const balanceEl = await web3State.provider.getBalance(web3State.account);
+				const balanceEl = await hashContract.balanceOf(web3State.account);
+				//  await web3State.provider.getBalance(web3State.account);
 				const balance = ethers.utils.formatEther(balanceEl);
 				if (web3State.account !== BlockchainWeb3InitialState.account) {
 					dispatch({ type: 'SET_balance', balance });
