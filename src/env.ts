@@ -12,4 +12,4 @@ const prod = {
 	gamerProfileAddress: '0x4a55A36036fD8b2164d77A5AcDf74709E9270583',
 };
 
-export const envVariables = process.env.REACT_APP_ENV === 'dev' ? dev : prod;
+export const envVariables = process.env.REACT_APP_ENV === 'production' ? prod : dev;

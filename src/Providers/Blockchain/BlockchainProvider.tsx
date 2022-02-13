@@ -326,7 +326,7 @@ export const BlockchainProvider = ({ children }: any) => {
 };
 
 const BlockchainContext = React.createContext({
-	isLogged: null,
+	isLogged: false,
 	loading: true,
 	isWeb3: false,
 	account: '',

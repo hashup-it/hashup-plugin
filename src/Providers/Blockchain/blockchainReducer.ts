@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 
 export const BlockchainWeb3InitialState = {
 	isWeb3: false,
-	isLogged: null,
+	isLogged: false,
 	loading: true,
 	isMetaMask: false,
 	account: ethers.constants.AddressZero,
