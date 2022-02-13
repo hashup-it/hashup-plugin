@@ -30,7 +30,7 @@ export const AdditionalPanel = () => {
             </Tooltip>
             <Button as={Link} href="https://gamexplorer.io" isExternal gridArea="gamexplorer" variant="outline" textTransform="uppercase">Gamexplorer</Button>
             <Button onClick={addTokenToMetamask} gridArea="addToMetamask" leftIcon={<MetamaskIcon />} textTransform="uppercase" variant="ghost">
-                Add&nbsp;<Text color="red">{game.symbol}</Text>&nbsp;to your wallet
+                Add&nbsp;<Text color="red">{game?.symbol}</Text>&nbsp;to your wallet
             </Button>
         </chakra.div>
     );

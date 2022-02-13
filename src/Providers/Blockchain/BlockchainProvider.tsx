@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
 import { BlockchainWeb3InitialState, BlockchainWeb3Reducer } from './blockchainReducer';
 import { chainIdtoName, getAccounts, isMetaMask, isWeb3, loginToMetaMask, networkChainParams } from './web3-utils';
-import HashContract from '../../Contracts/Hash/contract';
+import Erc20Contract from '../../Contracts/Hash/contract';
 import HashAddress from '../../Contracts/Hash/address';
 import IgoContract from '../../Contracts/GameIgo/igo.json';
 import Nicknames from '../../Contracts/Nicknames/nicknames.json';
@@ -11,17 +11,41 @@ import GamerProfile from '../../Contracts/GamerProfile/gamerProfile.json';
 import { envVariables } from "../../env";
 import { useToast } from '@chakra-ui/react'
 import { useGame } from '../GameProvider/GameProvider';
+import { useLocalStorage } from '../../Hooks/useLocalStorage';
+
+// @TODO quick solution, to fix: https://stackoverflow.com/questions/5448545/how-to-retrieve-get-parameters-from-javascript 
+const findGetParameter = (parameterName: string) => {
+    var result = null,
+        tmp = [];
+    window.location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+          tmp = item.split("=");
+          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
+}
 
 export const BlockchainProvider = ({ children }: any) => {
+	const [_buddy, setBuddy, clearBuddy] = useLocalStorage('buddy');
+
+	React.useEffect(() => {
+		const buddyParam = findGetParameter('buddy');
+		buddyParam ? setBuddy(buddyParam) : clearBuddy();
+	}, [])
+
 	const toast = useToast();
-	const { game } = useGame();
+	const { game, cartridgeAddress } = useGame();
 	const [isCheckOfWeb3, handleIsCheckedWeb3] = useState(false);
 	const [isLoadingBuyGame, handleIsLoadingBuyGame] = useState(false);
 	const [web3State, web3Dispatch] = useReducer(BlockchainWeb3Reducer, BlockchainWeb3InitialState) as any;
 
 	const dispatch = (action: any) => web3Dispatch(action);
 
-	const hashContract = useMemo(() => new ethers.Contract(HashAddress, HashContract, web3State.signer), [web3State.signer]);
+	const hashContract = useMemo(() => new ethers.Contract(HashAddress, Erc20Contract, web3State.signer), [web3State.signer]);
+	const gameContract = useMemo(() => new ethers.Contract(cartridgeAddress, Erc20Contract, web3State.signer), [web3State.signer]);
+
 	const igoContract = useMemo(
 		() => new ethers.Contract(envVariables.igoAddress, IgoContract, web3State.signer),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,16 +74,15 @@ export const BlockchainProvider = ({ children }: any) => {
 		});
 	}, [game]);
 
+	// TODO: refetch after buy on callback
     const buyGame = useCallback(
-		async ({ amount, cartridgeAddress }: { amount: string | number; cartridgeAddress: string }) => {
+		async ({ amount, cartridgeAddress, callback }: { amount: string | number; cartridgeAddress: string; callback: () => void }) => {
 			handleIsLoadingBuyGame(true);
 
 			const buyToken = await igoContract.getBuyTokenForCartridge(cartridgeAddress.toString())
 			const tokenPrice = await igoContract.getPrice(cartridgeAddress.toString(), buyToken);
 
-			console.warn(tokenPrice, ethers.utils.formatEther(tokenPrice), buyToken);
-
-			const erc20 = new ethers.Contract(buyToken, HashContract, web3State.signer); // TODO: not always HashContract
+			const erc20 = new ethers.Contract(buyToken, Erc20Contract, web3State.signer); // TODO: not always HashContract
 
 			if (!tokenPrice || !buyToken) {
 				handleIsLoadingBuyGame(false);
@@ -86,6 +109,7 @@ export const BlockchainProvider = ({ children }: any) => {
 								status: 'success',
 							});
 							handleIsLoadingBuyGame(false);
+							callback();
 						} else {
 							toast({
 								title: 'could not buy',
@@ -188,40 +212,42 @@ export const BlockchainProvider = ({ children }: any) => {
 		}
 	}, [web3State.account, web3State.chainId]);
 
-	// Get ETH amount
+
+	const updateGameBalance = async () => {
+		if (web3State.provider && web3State.account !== BlockchainWeb3InitialState.account) {
+			const walletBalance = await gameContract.balanceOf(web3State.account);
+			const gameBalance = ethers.utils.formatEther(walletBalance);
+			dispatch({ type: 'SET_gameBalance', gameBalance });
+		} else {
+			dispatch({
+				type: 'SET_gameBalance',
+				gameBalance: BlockchainWeb3InitialState.gameBalance,
+			});
+		}
+	}
+
+	const updateHashBalance = async () => {
+		if (web3State.provider && web3State.account !== BlockchainWeb3InitialState.account) {
+			const walletBalance = await hashContract.balanceOf(web3State.account);
+			const hashBalance = ethers.utils.formatEther(walletBalance);
+			dispatch({ type: 'SET_hashBalance', hashBalance });
+		} else {
+			dispatch({
+				type: 'SET_hashBalance',
+				hashBalance: BlockchainWeb3InitialState.hashBalance,
+			});
+		}
+	}
+
 	useEffect(() => {
-		(async () => {
-			if (web3State.provider && web3State.account !== BlockchainWeb3InitialState.account) {
-				const walletBalance = await hashContract.balanceOf(web3State.account);
-				// await web3State.provider.getBalance(web3State.account);
-				const balance = ethers.utils.formatEther(walletBalance);
-				dispatch({ type: 'SET_balance', balance });
-			} else {
-				dispatch({
-					type: 'SET_balance',
-					balance: BlockchainWeb3InitialState.balance,
-				});
-			}
-		})();
+		updateHashBalance();
+		updateGameBalance();
 	}, [web3State.provider, web3State.account]);
 
-	// Listen for balance change for webState.account
 	useEffect(() => {
 		if (web3State.provider) {
-			const updateBalance = async () => {
-				const balanceEl = await hashContract.balanceOf(web3State.account);
-				//  await web3State.provider.getBalance(web3State.account);
-				const balance = ethers.utils.formatEther(balanceEl);
-				if (web3State.account !== BlockchainWeb3InitialState.account) {
-					dispatch({ type: 'SET_balance', balance });
-				} else {
-					dispatch({
-						type: 'SET_balance',
-						balance: BlockchainWeb3InitialState.balance,
-					});
-				}
-			};
-			web3State.provider.on('block', updateBalance);
+			web3State.provider.on('block', updateHashBalance);
+			web3State.provider.on('block', updateGameBalance);
 		}
 	}, [web3State.provider, web3State.account]);
 
@@ -285,7 +311,8 @@ export const BlockchainProvider = ({ children }: any) => {
 				buyGame,
 				account: web3State.account,
 				loading: web3State.loading,
-				balance: web3State.balance,
+				hashBalance: web3State.hashBalance,
+				gameBalance: web3State.gameBalance,
 				isLoadingBuyGame,
 				hashContract,
 				nicknamesContract,
@@ -303,11 +330,12 @@ const BlockchainContext = React.createContext({
 	isWeb3: false,
 	account: '',
 	isLoadingBuyGame: false,
-	balance: 0,
+	hashBalance: 0,
+	gameBalance: 0,
 	login: () => {},
 	addTokenToMetamask: () => {},
 	// @ts-ignore
-	buyGame: ({ amount, cartridgeAddress }: { amount: string | number; cartridgeAddress: string }) => {},
+	buyGame: ({ amount, cartridgeAddress, callback }: { amount: string | number; cartridgeAddress: string; callback: () => void }) => {},
 	hashContract: null as any,
 	nicknamesContract: null as any,
 	gamerProfileContract: null as any,

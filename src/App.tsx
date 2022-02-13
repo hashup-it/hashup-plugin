@@ -14,10 +14,10 @@ const client = new ApolloClient({
 	},
 });
 
-function App() {
+function App({ cartridgeAddress }: { cartridgeAddress: string }) {
   return (
     <ApolloProvider client={client}>
-      <GameProvider>
+      <GameProvider cartridgeAddress={cartridgeAddress}>
         <BlockchainProvider>
             <ChakraProvider theme={chakraTheme}>
               <Fonts />

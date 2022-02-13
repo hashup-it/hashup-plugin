@@ -1,5 +1,6 @@
 import { chakra, HStack, SystemStyleObject, Text, theme } from "@chakra-ui/react";
 import { InfoIcon } from "../../../Components/Icons/InfoIcon";
+import { useBlockchainProvider } from "../../../Providers/Blockchain/BlockchainProvider";
 import { useGame } from "../../../Providers/GameProvider/GameProvider";
 
 const containerStyles: SystemStyleObject = {
@@ -10,11 +11,12 @@ const containerStyles: SystemStyleObject = {
 }
 
 export const Footer = () => {
+    const { gameBalance } = useBlockchainProvider();
     const { game } = useGame();
     return (
         <HStack __css={containerStyles}>
             <Text>
-                Available: <chakra.strong>0</chakra.strong> <chakra.span color="red">{game.symbol}</chakra.span>
+                Available: <chakra.strong>{gameBalance}</chakra.strong> <chakra.span color="red">{game?.symbol}</chakra.span>
             </Text>
 
             <Text fontWeight="600">

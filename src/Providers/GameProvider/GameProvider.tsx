@@ -3,12 +3,13 @@ import React, { ReactNode } from "react";
 import { Game } from "../../Graphql/api";
 import { getGame } from "../../Graphql/queries";
 
-export const GameProvider = ({ children }: { children: ReactNode }) => {
-	const { data } = useQuery(gql`${getGame}`, { variables: { id: process.env.REACT_APP_CARTRIDGE }});
+export const GameProvider = ({ children, cartridgeAddress }: { children: ReactNode, cartridgeAddress: string }) => {
+	const { data } = useQuery(gql`${getGame}`, { variables: { id: cartridgeAddress }});
 	return (
 		<GameContext.Provider
 			value={{
-                game: data?.getGame || {}
+				cartridgeAddress,
+                game: data?.getGame
 			}}
 		>
 			{children}
@@ -17,6 +18,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 };
 
 const GameContext = React.createContext({
+	cartridgeAddress: "",
     game: {} as Game
 });
 

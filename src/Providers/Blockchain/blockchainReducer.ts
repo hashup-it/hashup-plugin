@@ -6,7 +6,8 @@ export const BlockchainWeb3InitialState = {
 	loading: true,
 	isMetaMask: false,
 	account: ethers.constants.AddressZero,
-	balance: 0,
+	gameBalance: 0,
+	hashBalance: 0,
 	chainId: 0,
 	networkName: 'unknown',
 	eth_balance: ethers.utils.parseEther('0'),
@@ -17,7 +18,7 @@ export const BlockchainWeb3InitialState = {
 export const BlockchainWeb3Reducer = (state: any, action: any) => {
 	switch (action.type) {
 		case 'clear':
-			return { ...state, isLogged: false, account: BlockchainWeb3InitialState.account, balance: BlockchainWeb3InitialState.balance };
+			return { ...state, isLogged: false, account: BlockchainWeb3InitialState.account, hashBalance: BlockchainWeb3InitialState.hashBalance, gameBalance: BlockchainWeb3InitialState.gameBalance };
 		case 'SET_isWeb3':
 			return { ...state, isWeb3: action.isWeb3 };
 		case 'SET_isMetaMask':
@@ -32,8 +33,10 @@ export const BlockchainWeb3Reducer = (state: any, action: any) => {
 			return { ...state, signer: action.signer };
 		case 'SET_isLoading':
 			return { ...state, loading: action.loading };
-		case 'SET_balance':
-			return { ...state, balance: action.balance };
+		case 'SET_gameBalance':
+			return { ...state, balance: action.gameBalance };
+		case 'SET_hashBalance':
+			return { ...state, balance: action.hashBalance };
 		case 'SET_chainId':
 			return { ...state, chainId: action.chainId };
 		case 'SET_networkName':
