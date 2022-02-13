@@ -36,11 +36,6 @@ export const Body = () => {
         setAmount(calcAmountByItems().toString());
     }, [items]);
 
-    useEffect(() => {
-        if (!game) return;
-        setItems('1');
-    }, [game])
-
     const toSell = game ? (game!.cartridge!.totalSupply! - game!.cartridge!.sold!) : 0;
 
     return (

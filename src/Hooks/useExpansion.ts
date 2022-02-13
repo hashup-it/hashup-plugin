@@ -15,9 +15,11 @@ export interface ExpansionProps  {
 
 export const useExpansion = () => {
 	const { isLogged } = useBlockchainProvider();
-	const [expansionMode, setExpansionMode] = useLocalStorage(localStorageExpansionKey, isLogged ? EXPANSION_MODE.DISCONNECTED : EXPANSION_MODE.DISCONNECTED);
+	const [expansionMode, setExpansionMode] = useLocalStorage(localStorageExpansionKey);
 
 	useEffect(() => {
+		if (isLogged === null) return;
+
 		if (expansionMode === EXPANSION_MODE.DISCONNECTED && isLogged) {
 			setExpansionMode(EXPANSION_MODE.EXPAND)
 		} else if (!isLogged && expansionMode !== EXPANSION_MODE.DISCONNECTED) {

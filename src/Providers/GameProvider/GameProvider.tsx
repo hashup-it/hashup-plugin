@@ -19,7 +19,7 @@ export const GameProvider = ({ children, cartridgeAddress }: { children: ReactNo
 
 const GameContext = React.createContext({
 	cartridgeAddress: "",
-    game: {} as Game
+    game: {} as Game,
 });
 
 export const useGame = () => {
