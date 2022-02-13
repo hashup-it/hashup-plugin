@@ -44,7 +44,7 @@ export const BlockchainProvider = ({ children }: any) => {
 	const dispatch = (action: any) => web3Dispatch(action);
 
 	const hashContract = useMemo(() => new ethers.Contract(HashAddress, Erc20Contract, web3State.signer), [web3State.signer]);
-	const gameContract = useMemo(() => new ethers.Contract(cartridgeAddress, Erc20Contract, web3State.signer), [web3State.signer]);
+	const gameContract = useMemo(() => new ethers.Contract(cartridgeAddress, Erc20Contract, web3State.signer), [web3State.signer, cartridgeAddress]);
 
 	const igoContract = useMemo(
 		() => new ethers.Contract(envVariables.igoAddress, IgoContract, web3State.signer),
@@ -79,10 +79,10 @@ export const BlockchainProvider = ({ children }: any) => {
 		async ({ amount, cartridgeAddress, callback }: { amount: string | number; cartridgeAddress: string; callback: () => void }) => {
 			handleIsLoadingBuyGame(true);
 
-			const buyToken = await igoContract.getBuyTokenForCartridge(cartridgeAddress.toString())
+			const buyToken = await igoContract.getBuyTokenForCartridge(cartridgeAddress)
 			const tokenPrice = await igoContract.getPrice(cartridgeAddress.toString(), buyToken);
 
-			const erc20 = new ethers.Contract(buyToken, Erc20Contract, web3State.signer); // TODO: not always HashContract
+			const buyTokenContract = new ethers.Contract(buyToken, Erc20Contract, web3State.signer); // TODO: not always HashContract
 
 			if (!tokenPrice || !buyToken) {
 				handleIsLoadingBuyGame(false);
@@ -92,7 +92,8 @@ export const BlockchainProvider = ({ children }: any) => {
 				});
 			} else {
 				const totalPrice = (tokenPrice as BigNumber).mul(1).toString();
-				const allowToBuy = ((await erc20.allowance(web3State.account, envVariables.igoAddress)) as BigNumber).gte(totalPrice);
+				// console.warn(cartridgeAddress, buyToken, web3State.account, envVariables.igoAddress);
+				const allowToBuy = ((await buyTokenContract.allowance(web3State.account, envVariables.igoAddress)) as BigNumber).gte(totalPrice);
 				if (allowToBuy) {
 					const buyGameTransaction = await igoContract.buyGame(cartridgeAddress, BigNumber.from(amount), BigNumber.from(amount).mul(totalPrice));
 					if (!buyGameTransaction) {
@@ -119,7 +120,7 @@ export const BlockchainProvider = ({ children }: any) => {
 						}
 					}
 				} else {
-					const transactionHashContractApprove = await erc20.approve(envVariables.igoAddress, totalPrice);
+					const transactionHashContractApprove = await buyTokenContract.approve(envVariables.igoAddress, totalPrice);
 					if (transactionHashContractApprove) {
 						const transactionFinal = await transactionHashContractApprove.wait();
 						if (transactionFinal) {

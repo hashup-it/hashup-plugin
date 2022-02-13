@@ -1,4 +1,4 @@
-import { Avatar, Button, InputGroup, InputRightElement, Heading, HStack, SystemStyleObject, Tag, Text, VStack, Square, InputLeftElement, Select, Grid, Box, NumberInput, NumberInputField, Spinner } from "@chakra-ui/react";
+import { Avatar, Button, InputGroup, InputRightElement, Heading, HStack, SystemStyleObject, Tag, Text, VStack, Square, InputLeftElement, Select, Grid, Box, NumberInput, NumberInputField } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Card } from "../../../Components/Panels/Card";
 import { useBlockchainProvider } from "../../../Providers/Blockchain/BlockchainProvider";
@@ -41,25 +41,20 @@ export const Body = () => {
         setItems('1');
     }, [game])
 
-
-    if (!game) {
-        return <Spinner />
-    }
-
-    const toSell = game!.cartridge!.totalSupply! - game!.cartridge!.sold!;
+    const toSell = game ? (game!.cartridge!.totalSupply! - game!.cartridge!.sold!) : 0;
 
     return (
         <VStack __css={styles}>
             <HStack w="100%" justifyContent="space-between" mb="2rem">
                 <Card leftIcon={<Avatar size="lg" />}>
                     <Tag variant="solid" textTransform="uppercase" bg={game?.cartridge?.type}>{game?.cartridge?.type}</Tag>
-                    <Heading size="md">{game.title}</Heading>
+                    <Heading size="md">{game?.title}</Heading>
                     <Text w="150px" variant="primary" color="red.500" isTruncated>{game?.id}</Text>
                 </Card>
 
                 <Card>
                     <Text alignSelf="flex-end">Current price</Text>
-                    <Heading d="inline">{game.cartridge?.unitPrice}<Text d="inline" variant="primary">USDT</Text></Heading>
+                    <Heading d="inline">{game?.cartridge?.unitPrice}<Text d="inline" variant="primary">USDT</Text></Heading>
                 </Card>
             </HStack>
 
@@ -77,7 +72,7 @@ export const Body = () => {
                 </InputGroup>
                 <Button onClick={() => buyGame({ amount: (+items).toFixed(2), cartridgeAddress, callback: handleClear })}>Buy</Button>
                 <InputGroup h="39px">
-                    <NumberInput h="39px"  placeholder='Items' precision={2} value={items} onChange={setItems}>
+                    <NumberInput max={toSell} h="39px"  placeholder='Items' precision={2} value={items} onChange={setItems}>
                         <NumberInputField h="39px" pr="38px" />
                     </NumberInput>
                     <InputRightElement onClick={() => setItems(toSell.toString())} m=".5rem" children={<Box minW="20px" textAlign="center" p=".5rem .3rem" h="90%" bg="#fff" fontSize="9px" color="black">{toSell}</Box>} />

@@ -34,9 +34,9 @@ export const BlockchainWeb3Reducer = (state: any, action: any) => {
 		case 'SET_isLoading':
 			return { ...state, loading: action.loading };
 		case 'SET_gameBalance':
-			return { ...state, balance: action.gameBalance };
+			return { ...state, gameBalance: action.gameBalance };
 		case 'SET_hashBalance':
-			return { ...state, balance: action.hashBalance };
+			return { ...state, hashBalance: action.hashBalance };
 		case 'SET_chainId':
 			return { ...state, chainId: action.chainId };
 		case 'SET_networkName':
