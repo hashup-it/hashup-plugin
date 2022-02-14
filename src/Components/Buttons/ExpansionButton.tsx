@@ -16,9 +16,11 @@ export const ExpansionButton = forwardRef<IconButtonProps & { mode: EXPANSION_BT
     const styles = useStyleConfig('Button', { variant, size: 'sm'  })
     const cssStyles: SystemStyleObject = {
         ...styles,
-        px: "1.5rem !important",
-        borderRadius: "0 0 4px 4px",
+        px: "1rem !important",
+        py: ".2rem !important",
+        height: "auto",
+        borderRadius: "0 0 0.25rem 0.25rem",
     }
 
-    return <IconButton ref={ref} __css={cssStyles} {...rest} icon={expandIconOptions[mode]} />
+    return <IconButton size="md" ref={ref} __css={cssStyles} {...rest} icon={expandIconOptions[mode]} />
 });

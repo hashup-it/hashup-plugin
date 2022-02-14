@@ -5,11 +5,14 @@ export const PoweredByButton = forwardRef<ButtonProps, "button">(({ variant, siz
     const styles = useStyleConfig('Button', { variant, size: 'sm'  })
     const cssStyles: SystemStyleObject = {
         ...styles,
-        borderRadius: "0 0 .75rem .75rem",
-        fontSize: "0.825rem",
+        borderRadius: "0 0 .25rem .25rem",
+        fontSize: "0.625rem",
         backgroundColor: "#0A0A08",
+        px: "1rem !important",
+        py: ".3rem !important",
+        height: "auto",
         opacity: "0.2",
     }
 
-    return <Button ref={ref} __css={cssStyles} rightIcon={<><HashupIcon /> HashUp</>} {...rest}>Powered by</Button>
+    return <Button size="h-md" ref={ref} __css={cssStyles} rightIcon={<><HashupIcon /> HashUp</>} {...rest}>Powered by</Button>
 });

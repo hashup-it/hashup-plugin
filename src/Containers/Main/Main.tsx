@@ -1,4 +1,4 @@
-import { VStack, chakra } from "@chakra-ui/react"
+import { VStack, chakra, Box, theme, Heading } from "@chakra-ui/react"
 import { EXPANSION_MODE } from "../../Hooks/expansionMode.enum"
 import { Navigation } from "./Components/Navigation"
 import { AdditionalPanel } from "./Components/AdditionalPanel"
@@ -35,7 +35,7 @@ const options: any = {
     ),
     [EXPANSION_MODE.EXPAND]: (expansionProps: ExpansionProps) => (
         <>
-          <VStack spacing="0" mb=".5rem">
+          <VStack spacing="0" mb=".5rem" bg="#21242B">
             <Header w="100%">
               <HashupCard />
               <AccountCard onCollapse={expansionProps.onCollapse} />
@@ -54,5 +54,5 @@ export const Main = () => {
     const expansionProps = useExpansion();
     const { expansionMode } = expansionProps;
 
-    return options[expansionMode](expansionProps)
+    return options[expansionMode](expansionProps);
 }

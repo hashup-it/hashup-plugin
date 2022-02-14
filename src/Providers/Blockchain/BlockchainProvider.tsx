@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { BlockchainWeb3InitialState, BlockchainWeb3Reducer } from './blockchainReducer';
 import { chainIdtoName, getAccounts, isMetaMask, isWeb3, loginToMetaMask, networkChainParams } from './web3-utils';
 import Erc20Contract from '../../Contracts/Hash/contract';
@@ -12,6 +12,7 @@ import { envVariables } from "../../env";
 import { useToast } from '@chakra-ui/react'
 import { useGame } from '../GameProvider/GameProvider';
 import { useLocalStorage } from '../../Hooks/useLocalStorage';
+import { BigNumber } from "bignumber.js";
 
 // @TODO quick solution, to fix: https://stackoverflow.com/questions/5448545/how-to-retrieve-get-parameters-from-javascript 
 const findGetParameter = (parameterName: string) => {
@@ -27,35 +28,51 @@ const findGetParameter = (parameterName: string) => {
     return result;
 }
 
+const decimals = 1000000000000000000;
+const gameDecimals = 100;
+const buyToken = envVariables.hashAddress;
+
 export const BlockchainProvider = ({ children }: any) => {
-	const [_buddy, setBuddy, clearBuddy] = useLocalStorage('buddy');
+	const [buddy, setBuddy, clearBuddy] = useLocalStorage('buddy');
 
 	React.useEffect(() => {
 		const buddyParam = findGetParameter('buddy');
+		console.warn(buddyParam)
 		buddyParam ? setBuddy(buddyParam) : clearBuddy();
-	}, [])
+	}, []);
 
 	const toast = useToast();
 	const { game, cartridgeAddress } = useGame();
+	const [quantity, setQuantity] = useState('');
 	const [isCheckOfWeb3, handleIsCheckedWeb3] = useState(false);
+	const [allowance, setAllowance] = useState<BigNumber>(new BigNumber(0));
 	const [isLoadingBuyGame, handleIsLoadingBuyGame] = useState(false);
 	const [web3State, web3Dispatch] = useReducer(BlockchainWeb3Reducer, BlockchainWeb3InitialState) as any;
 
 	const dispatch = (action: any) => web3Dispatch(action);
 
+	/** CONTRACTS  */
 	const hashContract = useMemo(() => new ethers.Contract(HashAddress, Erc20Contract, web3State.signer), [web3State.signer]);
 	const gameContract = useMemo(() => new ethers.Contract(cartridgeAddress, Erc20Contract, web3State.signer), [web3State.signer, cartridgeAddress]);
-
-	const igoContract = useMemo(
-		() => new ethers.Contract(envVariables.igoAddress, IgoContract, web3State.signer),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[web3State.signer, envVariables.igoAddress],
-	);
+	const igoContract = useMemo(() => new ethers.Contract(envVariables.igoAddress, IgoContract, web3State.signer), [web3State.signer],);
 	const nicknamesContract = useMemo(() => new ethers.Contract(envVariables.nicknameAddress, Nicknames, web3State.signer), [web3State.signer]);
-	const gamerProfileContract = useMemo(
-		() => new ethers.Contract(envVariables.gamerProfileAddress, GamerProfile, web3State.signer),
-		[web3State.signer],
-	);
+	const gamerProfileContract = useMemo(() => new ethers.Contract(envVariables.gamerProfileAddress, GamerProfile, web3State.signer), [web3State.signer]);
+	const buyTokenContract = useMemo(() => new ethers.Contract(buyToken, Erc20Contract, web3State.signer), [web3State.signer, buyToken]);
+	/** END CONTRACTS */
+
+	const etherQuantity = useMemo(() => new BigNumber(quantity).multipliedBy(gameDecimals), [quantity]);
+	const etherTokenPrice = useMemo(() => new BigNumber(game?.cartridge?.unitPrice || 0).multipliedBy(decimals), [game]); // TODO: Fix
+	const etherTotalPrice = useMemo(() =>  etherTokenPrice.multipliedBy(quantity), [etherTokenPrice, quantity]); // logic of contract...
+	const isBuyAllowed = useMemo(() => etherQuantity.isLessThanOrEqualTo(allowance), [allowance, etherQuantity]);
+
+	useEffect(() => {
+		(async () => {
+			try {
+				const allowance = await buyTokenContract.allowance(web3State.account, envVariables.igoAddress);
+				setAllowance(new BigNumber(allowance.toString()));
+			} catch(e) { }
+		})();
+	}, [web3State.account, buyTokenContract]);
 
 	const addTokenToMetamask = useCallback(async () => {
 		const tokenDecimals = 18;
@@ -67,81 +84,69 @@ export const BlockchainProvider = ({ children }: any) => {
 				options: {
 					address: game.id,
 					symbol: game.symbol,
-					decimals: tokenDecimals, // @TODO: fix
+					decimals: 2,
 					image: game?.media?.logo,
 				},
 			},
 		});
 	}, [game]);
 
-	// TODO: refetch after buy on callback
-    const buyGame = useCallback(
-		async ({ amount, cartridgeAddress, callback }: { amount: string | number; cartridgeAddress: string; callback: () => void }) => {
-			handleIsLoadingBuyGame(true);
+	const approveGame = async () => {
+		handleIsLoadingBuyGame(true);
+		console.warn('approve game')
+		try {
+			// console.warn(etherTotalPrice.toString());
+			const transactionHashContractApprove = await buyTokenContract.approve(envVariables.igoAddress, etherQuantity.toString());
+			await transactionHashContractApprove.wait();
+			handleIsLoadingBuyGame(false);
+			toast({
+				title: 'approve game success',
+				status: 'success',
+			});
+		} catch(e) {
+			console.error(e);
+			handleIsLoadingBuyGame(false);
+			toast({
+				title: 'could not approve',
+				status: 'error',
+			});
+		}
+	}
 
-			const buyToken = await igoContract.getBuyTokenForCartridge(cartridgeAddress)
-			const tokenPrice = await igoContract.getPrice(cartridgeAddress.toString(), buyToken);
+	const buyGameTx = async () => {
+		console.warn(buddy);
+		if (buddy) {
+			return await igoContract.buyGameWithReflink(cartridgeAddress, etherQuantity.toString(), etherTotalPrice.toString(), buddy);
+		} else {
+			return await igoContract.buyGame(cartridgeAddress, etherQuantity.toString(), etherTotalPrice.toString());
+		}
+	}
 
-			const buyTokenContract = new ethers.Contract(buyToken, Erc20Contract, web3State.signer); // TODO: not always HashContract
+	const buyGame = async () => {
+		handleIsLoadingBuyGame(true);
+		if (etherQuantity.isGreaterThan(allowance)) {
+			return 'not allowed';
+		}
+		console.warn('buy game')
 
-			if (!tokenPrice || !buyToken) {
-				handleIsLoadingBuyGame(false);
-				toast({
-					title: 'error token price',
-					status: 'error',
-				});
-			} else {
-				const totalPrice = (tokenPrice as BigNumber).mul(1).toString();
-				// console.warn(cartridgeAddress, buyToken, web3State.account, envVariables.igoAddress);
-				const allowToBuy = ((await buyTokenContract.allowance(web3State.account, envVariables.igoAddress)) as BigNumber).gte(totalPrice);
-				if (allowToBuy) {
-					const buyGameTransaction = await igoContract.buyGame(cartridgeAddress, BigNumber.from(amount), BigNumber.from(amount).mul(totalPrice));
-					if (!buyGameTransaction) {
-						toast({
-							title: 'could not buy',
-							status: 'error',
-						});
-						handleIsLoadingBuyGame(false);
-					} else {
-						const buyGameTransactionFinal = await buyGameTransaction.wait();
-						if (buyGameTransactionFinal) {
-							toast({
-								title: 'buy game success',
-								status: 'success',
-							});
-							handleIsLoadingBuyGame(false);
-							callback();
-						} else {
-							toast({
-								title: 'could not buy',
-								status: 'error',
-							});
-							handleIsLoadingBuyGame(false);
-						}
-					}
-				} else {
-					const transactionHashContractApprove = await buyTokenContract.approve(envVariables.igoAddress, totalPrice);
-					if (transactionHashContractApprove) {
-						const transactionFinal = await transactionHashContractApprove.wait();
-						if (transactionFinal) {
-							toast({
-								title: 'buy game success',
-								status: 'success',
-							});
-							handleIsLoadingBuyGame(false);
-						}
-					} else {
-						toast({
-							title: 'could not buy',
-							status: 'error',
-						});
-						handleIsLoadingBuyGame(false);
-					}
-				}
-			}
-		},
-		[web3State.signer],
-	);
+		try {
+			const buyGameTransaction = await buyGameTx();
+			await buyGameTransaction.wait();
+			toast({
+				title: 'buy game success',
+				status: 'success',
+			});
+			handleIsLoadingBuyGame(false);
+		} catch(e) {
+			console.error(e);
+			toast({
+				title: 'could not buy',
+				status: 'error',
+			});
+			handleIsLoadingBuyGame(false);
+		}
+		return;
+	}
 
 	const login = useCallback(async () => {
 		try {
@@ -215,29 +220,33 @@ export const BlockchainProvider = ({ children }: any) => {
 
 
 	const updateGameBalance = async () => {
-		if (web3State.provider && web3State.account !== BlockchainWeb3InitialState.account) {
-			const walletBalance = await gameContract.balanceOf(web3State.account);
-			const gameBalance = ethers.utils.formatEther(walletBalance);
-			dispatch({ type: 'SET_gameBalance', gameBalance });
-		} else {
-			dispatch({
-				type: 'SET_gameBalance',
-				gameBalance: BlockchainWeb3InitialState.gameBalance,
-			});
-		}
+		try {
+			if (web3State.provider && web3State.account !== BlockchainWeb3InitialState.account) {
+				const walletBalance = await gameContract.balanceOf(web3State.account);
+				const balance = new BigNumber(walletBalance.toString()).div(gameDecimals);
+				dispatch({ type: 'SET_gameBalance', gameBalance: balance.toString() });
+			} else {
+				dispatch({
+					type: 'SET_gameBalance',
+					gameBalance: BlockchainWeb3InitialState.gameBalance,
+				});
+			}
+		} catch(e) { }
 	}
 
 	const updateHashBalance = async () => {
-		if (web3State.provider && web3State.account !== BlockchainWeb3InitialState.account) {
-			const walletBalance = await hashContract.balanceOf(web3State.account);
-			const hashBalance = ethers.utils.formatEther(walletBalance);
-			dispatch({ type: 'SET_hashBalance', hashBalance });
-		} else {
-			dispatch({
-				type: 'SET_hashBalance',
-				hashBalance: BlockchainWeb3InitialState.hashBalance,
-			});
-		}
+		try {
+			if (web3State.provider && web3State.account !== BlockchainWeb3InitialState.account) {
+				const walletBalance = await hashContract.balanceOf(web3State.account);
+				const hashBalance = ethers.utils.formatEther(walletBalance);
+				dispatch({ type: 'SET_hashBalance', hashBalance });
+			} else {
+				dispatch({
+					type: 'SET_hashBalance',
+					hashBalance: BlockchainWeb3InitialState.hashBalance,
+				});
+			}
+		} catch(e) { }
 	}
 
 	useEffect(() => {
@@ -255,14 +264,13 @@ export const BlockchainProvider = ({ children }: any) => {
 	// Listen for networks changes events
 	useEffect(() => {
 		if (web3State.isWeb3) {
-			if (process.env.NODE_ENV !== 'development') {
-				(async () => {
-					await (window as any).ethereum.request({
-						method: 'wallet_addEthereumChain',
-						params: [networkChainParams.BSC_MAINNET],
-					});
-				})();
-			}
+			// TODO: only dev
+			// (async () => {
+			// 	await (window as any).ethereum.request({
+			// 		method: 'wallet_addEthereumChain',
+			// 		params: [networkChainParams.BSC_MAINNET],
+			// 	});
+			// })();
 			const onChainChanged = async (chainId: number) => {
 				const chainIdEl = parseInt(Number(chainId).toString(), 10);
 				const networkName = chainIdtoName(chainIdEl);
@@ -310,6 +318,11 @@ export const BlockchainProvider = ({ children }: any) => {
 				isWeb3: web3State.isWeb3,
 				addTokenToMetamask,
 				buyGame,
+				approveGame,
+				quantity,
+				updateQuantity: setQuantity,
+				isBuyAllowed,
+				allowance,
 				account: web3State.account,
 				loading: web3State.loading,
 				hashBalance: web3State.hashBalance,
@@ -326,17 +339,22 @@ export const BlockchainProvider = ({ children }: any) => {
 };
 
 const BlockchainContext = React.createContext({
-	isLogged: false,
+	isLogged: null,
 	loading: true,
 	isWeb3: false,
 	account: '',
 	isLoadingBuyGame: false,
 	hashBalance: 0,
 	gameBalance: 0,
+	allowance: new BigNumber(0),
+	quantity: '',
+	isBuyAllowed: false,
+	updateQuantity: (value: string) => {},
 	login: () => {},
 	addTokenToMetamask: () => {},
 	// @ts-ignore
-	buyGame: ({ amount, cartridgeAddress, callback }: { amount: string | number; cartridgeAddress: string; callback: () => void }) => {},
+	buyGame: () => {},
+	approveGame: () => {},
 	hashContract: null as any,
 	nicknamesContract: null as any,
 	gamerProfileContract: null as any,

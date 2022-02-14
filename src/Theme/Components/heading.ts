@@ -7,5 +7,5 @@ export const heading = {
     },
     baseProps: {
         size: 'md'
-    }
+    },
 }

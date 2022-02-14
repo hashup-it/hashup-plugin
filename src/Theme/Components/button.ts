@@ -6,9 +6,11 @@ export const button = {
         fontWeight: 'bold',
     },
     sizes: {
-        md: {
-            h: '38px',
-        },
+        'h-md': {
+            h: '39px',
+            fontSize: '0.75rem',
+            borderRadius: '0.25rem',
+        }
     },
     variants: {
         solid: {
@@ -22,6 +24,6 @@ export const button = {
         },
         ghost: {
             color: theme.colors.white,
-        }
+        },
     }
 }

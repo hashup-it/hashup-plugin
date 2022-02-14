@@ -13,7 +13,7 @@ export const Navigation = ({ expansionMode, onPartialExpand, onExpand }: Expansi
     }
 
     return (
-        <HStack justifyContent="space-between" w="100%" pr="2rem">
+        <HStack justifyContent="space-between" w="100%" px="1rem">
             {getExpansionBtn()}
             <PoweredByButton aria-label="hashup" />
         </HStack>

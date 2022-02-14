@@ -4,10 +4,13 @@ import { useBlockchainProvider } from "../../../Providers/Blockchain/BlockchainP
 import { useGame } from "../../../Providers/GameProvider/GameProvider";
 
 const containerStyles: SystemStyleObject = {
-    w: "100%",
     justifyContent: "space-between",
     p: ".6rem 1rem",
     bg: theme.colors.black,
+    mx: "1.25rem",
+    mb: "1.25rem !important",
+    w: "calc(100% - 2.5rem)",
+    color: theme.colors.white,
 }
 
 export const Footer = () => {
@@ -20,7 +23,7 @@ export const Footer = () => {
             </Text>
 
             <Text fontWeight="600">
-                <InfoIcon /> To play the game, you must own at least 1 game
+                <InfoIcon /> &nbsp;To play the game, you must own at least 1 game
             </Text>
         </HStack>
     )
