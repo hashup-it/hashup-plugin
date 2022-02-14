@@ -63,15 +63,17 @@ export const BlockchainProvider = ({ children }: any) => {
 	const etherQuantity = useMemo(() => new BigNumber(quantity).multipliedBy(gameDecimals), [quantity]);
 	const etherTokenPrice = useMemo(() => new BigNumber(game?.cartridge?.unitPrice || 0).multipliedBy(decimals), [game]); // TODO: Fix
 	const etherTotalPrice = useMemo(() =>  etherTokenPrice.multipliedBy(quantity), [etherTokenPrice, quantity]); // logic of contract...
-	const isBuyAllowed = useMemo(() => etherQuantity.isLessThanOrEqualTo(allowance), [allowance, etherQuantity]);
+	const isBuyAllowed = useMemo(() => etherTotalPrice.isLessThanOrEqualTo(allowance), [allowance, etherTotalPrice]);
+
+	const updateAllowance = async () => {
+		try {
+			const allowance = await buyTokenContract.allowance(web3State.account, envVariables.igoAddress);
+			setAllowance(new BigNumber(allowance.toString()));
+		} catch(e) { }
+	}
 
 	useEffect(() => {
-		(async () => {
-			try {
-				const allowance = await buyTokenContract.allowance(web3State.account, envVariables.igoAddress);
-				setAllowance(new BigNumber(allowance.toString()));
-			} catch(e) { }
-		})();
+		updateAllowance();
 	}, [web3State.account, buyTokenContract]);
 
 	const addTokenToMetamask = useCallback(async () => {
@@ -96,8 +98,9 @@ export const BlockchainProvider = ({ children }: any) => {
 		console.warn('approve game')
 		try {
 			// console.warn(etherTotalPrice.toString());
-			const transactionHashContractApprove = await buyTokenContract.approve(envVariables.igoAddress, etherQuantity.toString());
+			const transactionHashContractApprove = await buyTokenContract.approve(envVariables.igoAddress, etherTotalPrice.toString());
 			await transactionHashContractApprove.wait();
+			await updateAllowance();
 			handleIsLoadingBuyGame(false);
 			toast({
 				title: 'approve game success',
@@ -124,7 +127,7 @@ export const BlockchainProvider = ({ children }: any) => {
 
 	const buyGame = async () => {
 		handleIsLoadingBuyGame(true);
-		if (etherQuantity.isGreaterThan(allowance)) {
+		if (etherTotalPrice.isGreaterThan(allowance)) {
 			return 'not allowed';
 		}
 		console.warn('buy game')
