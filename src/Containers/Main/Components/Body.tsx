@@ -1,4 +1,4 @@
-import { Avatar, Button, InputGroup, InputRightElement, Heading, HStack, SystemStyleObject, Tag, Text, VStack, Square, InputLeftElement, Select, Grid, Box, NumberInput, NumberInputField, theme, Spinner } from "@chakra-ui/react";
+import { Image, Button, InputGroup, InputRightElement, Heading, HStack, SystemStyleObject, Tag, Text, VStack, Square, InputLeftElement, Select, Grid, Box, NumberInput, NumberInputField, theme, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Card } from "../../../Components/Panels/Card";
 import { useBlockchainProvider } from "../../../Providers/Blockchain/BlockchainProvider";
@@ -34,7 +34,7 @@ export const Body = () => {
     return (
         <VStack __css={styles}>
             <HStack w="100%" justifyContent="space-between" mb="2rem">
-                <Card leftIcon={<Avatar size="md" />}>
+                <Card leftIcon={<Image src={game?.media?.logo} w="80px" maxH="60px" />}>
                     <Tag variant="solid" size="sm" minHeight=".825rem" px="0.2rem" borderRadius="2px" fontSize="0.5rem" textTransform="uppercase" bg={game?.cartridge?.type}>{game?.cartridge?.type}</Tag>
                     <Heading fontSize="1rem">{game?.title} {isLoadingBuyGame && <Spinner size="sm" />}</Heading>
                     <Text w="150px" variant="primary" color="red.500" isTruncated>{game?.id}</Text>
