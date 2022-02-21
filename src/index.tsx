@@ -42,9 +42,16 @@ const HashupPlugin = ({ cartridgeAddress, mode = PLUGIN_MODE.WEBSITE }: PluginPr
   </ChakraProvider>
 );
 
+const RootDomCartridge = () => {
+  const rootEl = document.getElementById('root');
+  const cartridgeAddress = rootEl?.getAttribute('data-cartridge') || envVariables.cartridgeAddress;
+
+  return <HashupPlugin cartridgeAddress={cartridgeAddress} mode={envVariables.pluginMode as PLUGIN_MODE} />
+}
+
 // ReactDOM.render(
 //   <React.StrictMode>
-//     <HashupPlugin cartridgeAddress={envVariables.cartridgeAddress} mode={envVariables.pluginMode as PLUGIN_MODE} />
+//     <RootDomCartridge />
 //   </React.StrictMode>,
 //   document.getElementById('root')
 // );
