@@ -71,10 +71,17 @@ export const Body = () => {
 
             // Swapping component
             <Flex gridGap="16px" flexDirection="column" color="white" width="100%">
-                <Flex flexDirection="column" gridGap="16px">
+                <Flex flexDirection="column" position="relative" gridGap="16px">
                     <Field type={TokenType.SWAPPED} data={tokenSwapped} value={amount} setValue={setAmount} />
                     <Field type={TokenType.RETRIEVED} data={tokenRetrieved} value={quantity}
                            setValue={updateQuantity} />
+                    <Image
+                        src="/assets/button-switch.svg"
+                        position="absolute"
+                        top="50%"
+                        left="50%"
+                        transform="translate(-50%, -50%)"
+                    />
                 </Flex>
                 <Button
                     filter="drop-shadow(0px 9px 12px rgba(255, 63, 63, 0.2))"
