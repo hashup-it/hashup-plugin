@@ -12,7 +12,7 @@ export const getGiftCards = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const listGiftCards = /* GraphQL */ `
 	query ListGiftCards($filter: ModelGiftCardsFilterInput, $limit: Int, $nextToken: String) {
 		listGiftCards(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -26,7 +26,7 @@ export const listGiftCards = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`
 export const getGameDraft = /* GraphQL */ `
 	query GetGameDraft($id: ID!) {
 		getGameDraft(id: $id) {
@@ -119,7 +119,7 @@ export const getGameDraft = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const listGameDrafts = /* GraphQL */ `
 	query ListGameDrafts($filter: ModelGameDraftFilterInput, $limit: Int, $nextToken: String) {
 		listGameDrafts(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -185,7 +185,7 @@ export const listGameDrafts = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`
 export const getGame = /* GraphQL */ `
 	query GetGame($id: ID!) {
 		getGame(id: $id) {
@@ -301,7 +301,7 @@ export const getGame = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const listGames = /* GraphQL */ `
 	query ListGames($filter: ModelGameFilterInput, $limit: Int, $nextToken: String) {
 		listGames(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -373,7 +373,7 @@ export const listGames = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`
 export const searchGames = /* GraphQL */ `
 	query SearchGames(
 		$filter: SearchableGameFilterInput
@@ -467,7 +467,7 @@ export const searchGames = /* GraphQL */ `
 			}
 		}
 	}
-`;
+`
 export const getTeamAccount = /* GraphQL */ `
 	query GetTeamAccount($id: ID!) {
 		getTeamAccount(id: $id) {
@@ -517,7 +517,7 @@ export const getTeamAccount = /* GraphQL */ `
 			teamAccountAccountId
 		}
 	}
-`;
+`
 export const listTeamAccounts = /* GraphQL */ `
 	query ListTeamAccounts($filter: ModelTeamAccountFilterInput, $limit: Int, $nextToken: String) {
 		listTeamAccounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -547,7 +547,7 @@ export const listTeamAccounts = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`
 export const getAccount = /* GraphQL */ `
 	query GetAccount($id: ID!) {
 		getAccount(id: $id) {
@@ -630,7 +630,7 @@ export const getAccount = /* GraphQL */ `
 			accountTeamAccountId
 		}
 	}
-`;
+`
 export const listAccounts = /* GraphQL */ `
 	query ListAccounts($filter: ModelAccountFilterInput, $limit: Int, $nextToken: String) {
 		listAccounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -676,7 +676,7 @@ export const listAccounts = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`
 export const searchAccounts = /* GraphQL */ `
 	query SearchAccounts(
 		$filter: SearchableAccountFilterInput
@@ -744,7 +744,7 @@ export const searchAccounts = /* GraphQL */ `
 			}
 		}
 	}
-`;
+`
 export const getAccountWatchlist = /* GraphQL */ `
 	query GetAccountWatchlist($id: ID!) {
 		getAccountWatchlist(id: $id) {
@@ -833,7 +833,7 @@ export const getAccountWatchlist = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const listAccountWatchlists = /* GraphQL */ `
 	query ListAccountWatchlists($filter: ModelAccountWatchlistFilterInput, $limit: Int, $nextToken: String) {
 		listAccountWatchlists(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -879,7 +879,7 @@ export const listAccountWatchlists = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`
 export const getNewsletterMembers = /* GraphQL */ `
 	query GetNewsletterMembers($id: ID!) {
 		getNewsletterMembers(id: $id) {
@@ -929,7 +929,7 @@ export const getNewsletterMembers = /* GraphQL */ `
 			newsletterMembersAccountId
 		}
 	}
-`;
+`
 export const listNewsletterMembers = /* GraphQL */ `
 	query ListNewsletterMembers($filter: ModelNewsletterMembersFilterInput, $limit: Int, $nextToken: String) {
 		listNewsletterMembers(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -959,7 +959,7 @@ export const listNewsletterMembers = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`
 export const getGameTransaction = /* GraphQL */ `
 	query GetGameTransaction($id: ID!) {
 		getGameTransaction(id: $id) {
@@ -1116,7 +1116,7 @@ export const getGameTransaction = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const listGameTransactions = /* GraphQL */ `
 	query ListGameTransactions($filter: ModelGameTransactionFilterInput, $limit: Int, $nextToken: String) {
 		listGameTransactions(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -1178,7 +1178,7 @@ export const listGameTransactions = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`
 export const searchGameTransactions = /* GraphQL */ `
 	query SearchGameTransactions(
 		$filter: SearchableGameTransactionFilterInput
@@ -1262,7 +1262,7 @@ export const searchGameTransactions = /* GraphQL */ `
 			}
 		}
 	}
-`;
+`
 export const getAccountTransaction = /* GraphQL */ `
 	query GetAccountTransaction($id: ID!) {
 		getAccountTransaction(id: $id) {
@@ -1393,7 +1393,7 @@ export const getAccountTransaction = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const listAccountTransactions = /* GraphQL */ `
 	query ListAccountTransactions($filter: ModelAccountTransactionFilterInput, $limit: Int, $nextToken: String) {
 		listAccountTransactions(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -1458,7 +1458,7 @@ export const listAccountTransactions = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`
 export const searchAccountTransactions = /* GraphQL */ `
 	query SearchAccountTransactions(
 		$filter: SearchableAccountTransactionFilterInput
@@ -1545,7 +1545,7 @@ export const searchAccountTransactions = /* GraphQL */ `
 			}
 		}
 	}
-`;
+`
 export const getAccountGame = /* GraphQL */ `
 	query GetAccountGame($id: ID!) {
 		getAccountGame(id: $id) {
@@ -1660,7 +1660,7 @@ export const getAccountGame = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const listAccountGames = /* GraphQL */ `
 	query ListAccountGames($filter: ModelAccountGameFilterInput, $limit: Int, $nextToken: String) {
 		listAccountGames(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -1703,4 +1703,4 @@ export const listAccountGames = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`

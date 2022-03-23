@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const listCustomSmallGames = /* GraphQL */ `
 	query ListGames($filter: ModelGameFilterInput, $limit: Int, $nextToken: String) {
@@ -23,7 +23,7 @@ export const listCustomSmallGames = /* GraphQL */ `
 			nextToken
 		}
 	}
-`;
+`
 
 export const getAccountSmall = /* GraphQL */ `
 	query GetAccount($id: ID!) {
@@ -72,7 +72,7 @@ export const getAccountSmall = /* GraphQL */ `
 			isVerified
 		}
 	}
-`;
+`
 
 export const getAccountWithGames = /* GraphQL */ `
 	query GetAccount($id: ID!) {
@@ -144,7 +144,7 @@ export const getAccountWithGames = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 
 export const SearchData = (id: string) => gql`
 	{
@@ -206,7 +206,7 @@ export const SearchData = (id: string) => gql`
 		}
 		
 	}
-`;
+`
 
 export const getOneGameQuery = /* GraphQL */ `
 	query GetGame($id: ID!) {
@@ -323,4 +323,4 @@ export const getOneGameQuery = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`

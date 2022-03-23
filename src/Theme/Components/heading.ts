@@ -1,4 +1,4 @@
-import { theme } from "@chakra-ui/react";
+import { theme } from '@chakra-ui/react'
 
 export const heading = {
     baseStyle: {
@@ -7,5 +7,5 @@ export const heading = {
     },
     baseProps: {
         size: 'md'
-    },
+    }
 }

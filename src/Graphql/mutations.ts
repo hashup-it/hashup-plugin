@@ -8,7 +8,7 @@ export const addToIpfs = /* GraphQL */ `
 			url
 		}
 	}
-`;
+`
 export const createGiftCards = /* GraphQL */ `
 	mutation CreateGiftCards($input: CreateGiftCardsInput!, $condition: ModelGiftCardsConditionInput) {
 		createGiftCards(input: $input, condition: $condition) {
@@ -19,7 +19,7 @@ export const createGiftCards = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const updateGiftCards = /* GraphQL */ `
 	mutation UpdateGiftCards($input: UpdateGiftCardsInput!, $condition: ModelGiftCardsConditionInput) {
 		updateGiftCards(input: $input, condition: $condition) {
@@ -30,7 +30,7 @@ export const updateGiftCards = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const deleteGiftCards = /* GraphQL */ `
 	mutation DeleteGiftCards($input: DeleteGiftCardsInput!, $condition: ModelGiftCardsConditionInput) {
 		deleteGiftCards(input: $input, condition: $condition) {
@@ -41,7 +41,7 @@ export const deleteGiftCards = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const createGameDraft = /* GraphQL */ `
 	mutation CreateGameDraft($input: CreateGameDraftInput!, $condition: ModelGameDraftConditionInput) {
 		createGameDraft(input: $input, condition: $condition) {
@@ -134,7 +134,7 @@ export const createGameDraft = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const updateGameDraft = /* GraphQL */ `
 	mutation UpdateGameDraft($input: UpdateGameDraftInput!, $condition: ModelGameDraftConditionInput) {
 		updateGameDraft(input: $input, condition: $condition) {
@@ -227,7 +227,7 @@ export const updateGameDraft = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const deleteGameDraft = /* GraphQL */ `
 	mutation DeleteGameDraft($input: DeleteGameDraftInput!, $condition: ModelGameDraftConditionInput) {
 		deleteGameDraft(input: $input, condition: $condition) {
@@ -320,7 +320,7 @@ export const deleteGameDraft = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const createGame = /* GraphQL */ `
 	mutation CreateGame($input: CreateGameInput!, $condition: ModelGameConditionInput) {
 		createGame(input: $input, condition: $condition) {
@@ -436,7 +436,7 @@ export const createGame = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const updateGame = /* GraphQL */ `
 	mutation UpdateGame($input: UpdateGameInput!, $condition: ModelGameConditionInput) {
 		updateGame(input: $input, condition: $condition) {
@@ -552,7 +552,7 @@ export const updateGame = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const deleteGame = /* GraphQL */ `
 	mutation DeleteGame($input: DeleteGameInput!, $condition: ModelGameConditionInput) {
 		deleteGame(input: $input, condition: $condition) {
@@ -668,7 +668,7 @@ export const deleteGame = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const createTeamAccount = /* GraphQL */ `
 	mutation CreateTeamAccount($input: CreateTeamAccountInput!, $condition: ModelTeamAccountConditionInput) {
 		createTeamAccount(input: $input, condition: $condition) {
@@ -718,7 +718,7 @@ export const createTeamAccount = /* GraphQL */ `
 			teamAccountAccountId
 		}
 	}
-`;
+`
 export const updateTeamAccount = /* GraphQL */ `
 	mutation UpdateTeamAccount($input: UpdateTeamAccountInput!, $condition: ModelTeamAccountConditionInput) {
 		updateTeamAccount(input: $input, condition: $condition) {
@@ -768,7 +768,7 @@ export const updateTeamAccount = /* GraphQL */ `
 			teamAccountAccountId
 		}
 	}
-`;
+`
 export const deleteTeamAccount = /* GraphQL */ `
 	mutation DeleteTeamAccount($input: DeleteTeamAccountInput!, $condition: ModelTeamAccountConditionInput) {
 		deleteTeamAccount(input: $input, condition: $condition) {
@@ -818,7 +818,7 @@ export const deleteTeamAccount = /* GraphQL */ `
 			teamAccountAccountId
 		}
 	}
-`;
+`
 export const createAccount = /* GraphQL */ `
 	mutation CreateAccount($input: CreateAccountInput!, $condition: ModelAccountConditionInput) {
 		createAccount(input: $input, condition: $condition) {
@@ -901,7 +901,7 @@ export const createAccount = /* GraphQL */ `
 			accountTeamAccountId
 		}
 	}
-`;
+`
 export const updateAccount = /* GraphQL */ `
 	mutation UpdateAccount($input: UpdateAccountInput!, $condition: ModelAccountConditionInput) {
 		updateAccount(input: $input, condition: $condition) {
@@ -984,7 +984,7 @@ export const updateAccount = /* GraphQL */ `
 			accountTeamAccountId
 		}
 	}
-`;
+`
 export const deleteAccount = /* GraphQL */ `
 	mutation DeleteAccount($input: DeleteAccountInput!, $condition: ModelAccountConditionInput) {
 		deleteAccount(input: $input, condition: $condition) {
@@ -1067,7 +1067,7 @@ export const deleteAccount = /* GraphQL */ `
 			accountTeamAccountId
 		}
 	}
-`;
+`
 export const createAccountWatchlist = /* GraphQL */ `
 	mutation CreateAccountWatchlist($input: CreateAccountWatchlistInput!, $condition: ModelAccountWatchlistConditionInput) {
 		createAccountWatchlist(input: $input, condition: $condition) {
@@ -1156,7 +1156,7 @@ export const createAccountWatchlist = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const updateAccountWatchlist = /* GraphQL */ `
 	mutation UpdateAccountWatchlist($input: UpdateAccountWatchlistInput!, $condition: ModelAccountWatchlistConditionInput) {
 		updateAccountWatchlist(input: $input, condition: $condition) {
@@ -1245,7 +1245,7 @@ export const updateAccountWatchlist = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const deleteAccountWatchlist = /* GraphQL */ `
 	mutation DeleteAccountWatchlist($input: DeleteAccountWatchlistInput!, $condition: ModelAccountWatchlistConditionInput) {
 		deleteAccountWatchlist(input: $input, condition: $condition) {
@@ -1334,7 +1334,7 @@ export const deleteAccountWatchlist = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const createNewsletterMembers = /* GraphQL */ `
 	mutation CreateNewsletterMembers($input: CreateNewsletterMembersInput!, $condition: ModelNewsletterMembersConditionInput) {
 		createNewsletterMembers(input: $input, condition: $condition) {
@@ -1384,7 +1384,7 @@ export const createNewsletterMembers = /* GraphQL */ `
 			newsletterMembersAccountId
 		}
 	}
-`;
+`
 export const updateNewsletterMembers = /* GraphQL */ `
 	mutation UpdateNewsletterMembers($input: UpdateNewsletterMembersInput!, $condition: ModelNewsletterMembersConditionInput) {
 		updateNewsletterMembers(input: $input, condition: $condition) {
@@ -1434,7 +1434,7 @@ export const updateNewsletterMembers = /* GraphQL */ `
 			newsletterMembersAccountId
 		}
 	}
-`;
+`
 export const deleteNewsletterMembers = /* GraphQL */ `
 	mutation DeleteNewsletterMembers($input: DeleteNewsletterMembersInput!, $condition: ModelNewsletterMembersConditionInput) {
 		deleteNewsletterMembers(input: $input, condition: $condition) {
@@ -1484,7 +1484,7 @@ export const deleteNewsletterMembers = /* GraphQL */ `
 			newsletterMembersAccountId
 		}
 	}
-`;
+`
 export const createGameTransaction = /* GraphQL */ `
 	mutation CreateGameTransaction($input: CreateGameTransactionInput!, $condition: ModelGameTransactionConditionInput) {
 		createGameTransaction(input: $input, condition: $condition) {
@@ -1641,7 +1641,7 @@ export const createGameTransaction = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const updateGameTransaction = /* GraphQL */ `
 	mutation UpdateGameTransaction($input: UpdateGameTransactionInput!, $condition: ModelGameTransactionConditionInput) {
 		updateGameTransaction(input: $input, condition: $condition) {
@@ -1798,7 +1798,7 @@ export const updateGameTransaction = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const deleteGameTransaction = /* GraphQL */ `
 	mutation DeleteGameTransaction($input: DeleteGameTransactionInput!, $condition: ModelGameTransactionConditionInput) {
 		deleteGameTransaction(input: $input, condition: $condition) {
@@ -1955,7 +1955,7 @@ export const deleteGameTransaction = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const createAccountTransaction = /* GraphQL */ `
 	mutation CreateAccountTransaction($input: CreateAccountTransactionInput!, $condition: ModelAccountTransactionConditionInput) {
 		createAccountTransaction(input: $input, condition: $condition) {
@@ -2086,7 +2086,7 @@ export const createAccountTransaction = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const updateAccountTransaction = /* GraphQL */ `
 	mutation UpdateAccountTransaction($input: UpdateAccountTransactionInput!, $condition: ModelAccountTransactionConditionInput) {
 		updateAccountTransaction(input: $input, condition: $condition) {
@@ -2217,7 +2217,7 @@ export const updateAccountTransaction = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const deleteAccountTransaction = /* GraphQL */ `
 	mutation DeleteAccountTransaction($input: DeleteAccountTransactionInput!, $condition: ModelAccountTransactionConditionInput) {
 		deleteAccountTransaction(input: $input, condition: $condition) {
@@ -2348,7 +2348,7 @@ export const deleteAccountTransaction = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const createAccountGame = /* GraphQL */ `
 	mutation CreateAccountGame($input: CreateAccountGameInput!, $condition: ModelAccountGameConditionInput) {
 		createAccountGame(input: $input, condition: $condition) {
@@ -2463,7 +2463,7 @@ export const createAccountGame = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const updateAccountGame = /* GraphQL */ `
 	mutation UpdateAccountGame($input: UpdateAccountGameInput!, $condition: ModelAccountGameConditionInput) {
 		updateAccountGame(input: $input, condition: $condition) {
@@ -2578,7 +2578,7 @@ export const updateAccountGame = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
 export const deleteAccountGame = /* GraphQL */ `
 	mutation DeleteAccountGame($input: DeleteAccountGameInput!, $condition: ModelAccountGameConditionInput) {
 		deleteAccountGame(input: $input, condition: $condition) {
@@ -2693,4 +2693,4 @@ export const deleteAccountGame = /* GraphQL */ `
 			updatedAt
 		}
 	}
-`;
+`
