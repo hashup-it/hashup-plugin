@@ -1,6 +1,0 @@
-mutation MyMutation {
-  createGame(input: {cartridge: {address: "0x6490087e7C26d1B798B841f200ebCeFe84076623", type: GREEN, unitPrice: 11, unitPriceInHash: 22, tradingFee: 32, cryptoCurrency: BNB, blockchain: POLYGON, initialPrice: 122, marketCap: 34, sold: 2, totalSupply: 3}, id: "0x6490087e7C226d1B798B841f200ebCeFe84076623", media: {logo: "https://cdn.hashup.it/PONG.png", coverPhoto: "https://cdn.hashup.it/background.png", banner2: "https://cdn.hashup.it/game_example.png", banner1: "https://cdn.hashup.it/game_example.png"}, url: "https://cdn.hashup.it/examplePong.png", title: "p2", platforms: WEB, symbol: "p2", name: "Pong 2", metadataUrl: "https://cdn.hashup.it/examplePong.png", metadata: {description: "Pong 2 jak kto nie wierzy", gamePaper: "https://cdn.hashup.it/examplePong.png", screens: "https://cdn.hashup.it/examplePong.png", social: {discord: "www.google.pl"}, video: ""}, colors: {bg: "#BEA379", cta: "#BEA379", text: "#BEA379"}}) {
-    id
-  }
-}
-
