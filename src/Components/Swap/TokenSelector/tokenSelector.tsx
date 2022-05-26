@@ -2,7 +2,7 @@ import React from 'react'
 import { Flex, Text } from '@chakra-ui/react'
 import { IToken } from '../swap'
 
-export const TokenSelector = ({ data, isSelectable }: { data: IToken, isSelectable: boolean }) => {
+export const TokenSelector = ({ data, isSelectable = false }: { data: IToken, isSelectable?: boolean }) => {
     return (
         <Flex fontWeight="600" fontSize="16px" lineHeight="20px" alignItems="center" gridGap="8px"
               cursor={isSelectable ? 'pointer' : 'unset'}>

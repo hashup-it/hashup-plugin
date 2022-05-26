@@ -15,12 +15,12 @@ const containerStyles: SystemStyleObject = {
 
 export const Footer = () => {
     const { gameBalance } = useBlockchainProvider()
-    const { game } = useGame()
+    const { data: game } = useGame()
     return (
         <HStack __css={containerStyles}>
             <Text>
                 Available:&nbsp;<chakra.strong>{gameBalance}</chakra.strong>
-                &nbsp;<chakra.span color="#FF3F3F">{game?.symbol}</chakra.span>
+                &nbsp;<chakra.span color="#FF3F3F">{game.symbol}</chakra.span>
             </Text>
 
             <Text fontWeight="600">

@@ -1,6 +1,59 @@
 [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_cartridgeAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "buyCartridge",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_cartridgeAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_referrer",
+        "type": "address"
+      }
+    ],
+    "name": "buyCartridge",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "success",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "paymentToken_",
+        "type": "address"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -10,63 +63,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "buyAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
         "name": "cartridgeAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "buy",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "buyAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "cartridgeAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "reflinkAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "buyWithReflink",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "creator",
         "type": "address"
       },
       {
@@ -78,23 +75,11 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "supply",
+        "name": "amount",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "buyToken",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "cartridgeAddress",
-        "type": "address"
       }
     ],
-    "name": "createIGO",
+    "name": "CartridgesBought",
     "type": "event"
   },
   {
@@ -103,7 +88,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "cartirdge",
+        "name": "cartridgeAddress",
         "type": "address"
       },
       {
@@ -113,27 +98,106 @@
         "type": "uint256"
       }
     ],
-    "name": "setCartridgesForClaimEvent",
+    "name": "CartridgesWithdrawn",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "cartridgeAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
-      },
+      }
+    ],
+    "name": "sendCartridgeToStore",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
       {
         "indexed": false,
         "internalType": "address",
         "name": "cartridgeAddress",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "color",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "media",
+        "type": "string"
       }
     ],
-    "name": "withdraw",
+    "name": "SentToStore",
     "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newCreator",
+        "type": "address"
+      }
+    ],
+    "name": "transferCreatorship",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -146,134 +210,22 @@
         "internalType": "uint256",
         "name": "_amount",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_buyTokenAmmount",
-        "type": "uint256"
       }
     ],
-    "name": "buyGame",
+    "name": "withdrawCartridges",
     "outputs": [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "withdrawnAmount",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_cartridgeAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_buyTokenAmmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_reflinkAddress",
-        "type": "address"
-      }
-    ],
-    "name": "buyGameWithReflink",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "cartridgesForClaim",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_cartridgeAddress",
-        "type": "address"
-      }
-    ],
-    "name": "claimCartridge",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "getAmountAfterFees",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_cartridgeAddress",
-        "type": "address"
-      }
-    ],
-    "name": "getBuyTokenForCartridge",
+    "inputs": [],
+    "name": "creator",
     "outputs": [
       {
         "internalType": "address",
@@ -287,16 +239,26 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_cartridgeAddress",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "_totalValue",
+        "type": "uint256"
       }
     ],
-    "name": "getCartridgesForClaim",
+    "name": "distributePayment",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "toCreator",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "toPlatform",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "toReferrer",
         "type": "uint256"
       }
     ],
@@ -307,20 +269,15 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_cartridgeAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_buyToken",
+        "name": "cartridgeAddress",
         "type": "address"
       }
     ],
-    "name": "getPrice",
+    "name": "getCartridgePrice",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "pr",
+        "name": "price",
         "type": "uint256"
       }
     ],
@@ -329,7 +286,7 @@
   },
   {
     "inputs": [],
-    "name": "hashUpCreator",
+    "name": "paymentToken",
     "outputs": [
       {
         "internalType": "address",
@@ -341,24 +298,13 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "isAddressClaimCartridge",
+    "inputs": [],
+    "name": "platformFee",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -368,116 +314,51 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_cartridgeAddress",
+        "name": "",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
       }
     ],
-    "name": "setCartridgesForClaim",
+    "name": "raisedAmount",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_price",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_cartridgeSupplyForSale",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_buyToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_cartridgeAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setGameForSale",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
       {
         "internalType": "address",
-        "name": "_cartridgeAddress",
+        "name": "",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_buyToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_newPrice",
-        "type": "uint256"
       }
     ],
-    "name": "setNewPrice",
+    "name": "reflinkAmount",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "newPrice",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_cartridgeAddress",
-        "type": "address"
-      }
-    ],
-    "name": "withdrawCartridges",
+    "inputs": [],
+    "name": "reflinkFee",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   }
 ]

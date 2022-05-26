@@ -18,7 +18,7 @@ const containerStyles: SystemStyleObject = {
 
 export const AdditionalPanel = () => {
     const { copyReflink, hasCopied } = useReflink()
-    const { game } = useGame()
+    const { data: game } = useGame()
     const { addTokenToMetamask } = useBlockchainProvider()
 
     return (
@@ -36,7 +36,7 @@ export const AdditionalPanel = () => {
                     variant="outline" textTransform="uppercase">Gamexplorer</Button>
             <Button size="h-md" onClick={addTokenToMetamask} gridArea="addToMetamask" leftIcon={<MetamaskIcon />}
                     textTransform="uppercase" variant="ghost">
-                Add&nbsp;<Text color="#FF3F3F">{game?.symbol}</Text>&nbsp;to your wallet
+                Add&nbsp;<Text color="#FF3F3F">{game.symbol}</Text>&nbsp;to your wallet
             </Button>
         </chakra.div>
     )

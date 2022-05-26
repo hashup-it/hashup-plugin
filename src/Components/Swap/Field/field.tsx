@@ -3,6 +3,8 @@ import { Flex, NumberInput, NumberInputField, Text } from '@chakra-ui/react'
 import { Button } from './Button/button'
 import { IToken } from '../swap'
 import { TokenSelector } from '../TokenSelector/tokenSelector'
+import { getBalanceDecimals, safeSimplifyBalance } from '../../../Utils/parser';
+import { ethers } from 'ethers';
 
 export enum TokenType {
     SWAPPED,
@@ -27,14 +29,47 @@ export const Field = (
         setValue: ((event: React.ChangeEvent<HTMLInputElement>) => void) | ((value: string) => void) | any;
     }) => {
     const handleValueChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value)
-    }
-    const handleValueMaxOut = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        setValue(parseFloat(data.value))
-    }
-    const handleValueHalve = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        setValue((parseFloat(data.value) / 2).toString())
-    }
+        const payload = event.target.value;
+
+        if (payload === '0' || payload === '0.' || payload === '.' || payload === '') {
+            setValue(isNaN(payload as any) ? '0.' : '0');
+
+            return
+        }
+
+        if (isNaN(Number(payload)) || getBalanceDecimals(payload) > (type === TokenType.SWAPPED ? 6 : 0)) {
+            setValue('0');
+            return;
+        }
+
+        const output = safeSimplifyBalance(payload);
+
+        console.log('setting out', output)
+        setValue(output);
+    };
+
+    const handleValueMaxOut = async () => {
+        const payload = data.value;
+
+        const output = safeSimplifyBalance(payload);
+
+        setValue(output);
+    };
+
+    /**
+     * Is allowed to be inaccurate (hence the `Number` conversion)
+     */
+    const handleValueHalve = async () => {
+        const payload = data.value;
+
+        const value = ethers.utils.parseUnits(payload, 6);
+        const valueHalved = value.div(2);
+        const valueFormatted = ethers.utils.formatUnits(valueHalved, 6);
+
+        const output = safeSimplifyBalance(valueFormatted);
+
+        setValue(output);
+    };
 
     return (
         <Flex
@@ -65,7 +100,7 @@ export const Field = (
                 </Flex>
             </Flex>
             <Flex justifyContent="space-between" alignItems="center" flexDirection="row">
-                <TokenSelector data={data} isSelectable={type === TokenType.SWAPPED} />
+                <TokenSelector data={data} />
                 <NumberInput value={value ?? ''} variant="unstyled" textAlign="right" fontWeight="600" fontSize="16px"
                              lineHeight="20px" width="100%">
                     <NumberInputField
@@ -79,7 +114,6 @@ export const Field = (
                         padding="0"
                         onChange={handleValueChange}
                         autoFocus={type === TokenType.SWAPPED}
-                        disabled={type === TokenType.RETRIEVED}
                     />
                 </NumberInput>
             </Flex>
