@@ -1,1 +1,1 @@
-export const tag = {}
+export const tag = {};

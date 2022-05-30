@@ -1,51 +1,64 @@
-import React from 'react'
-import { Flex, NumberInput, NumberInputField, Text } from '@chakra-ui/react'
-import { Button } from './Button/button'
-import { IToken } from '../swap'
-import { TokenSelector } from '../TokenSelector/tokenSelector'
-import { getBalanceDecimals, safeSimplifyBalance } from '../../../Utils/parser';
+import React, { useRef } from 'react';
+import { Flex, NumberInput, NumberInputField, Text } from '@chakra-ui/react';
+import { Button } from './Button/button';
+import { IToken } from '../swap';
+import { getBalanceDecimals, prettyPrintBalance, safeSimplifyBalance } from '../../../Utils/parser';
 import { ethers } from 'ethers';
+import { decimals } from '../../../Providers/Blockchain/BlockchainProvider';
+import { colors } from '../../../Utils/colors';
 
-export enum TokenType {
+export enum FieldType {
     SWAPPED,
     RETRIEVED,
 }
 
-const FieldText = {
-    [TokenType.SWAPPED]: 'From',
-    [TokenType.RETRIEVED]: 'To'
-}
+const fieldText = {
+    [FieldType.SWAPPED]: 'You Sell',
+    [FieldType.RETRIEVED]: 'You Get',
+};
 
-export const Field = (
-    {
-        type,
-        data,
-        value,
-        setValue
-    }: {
-        type: TokenType;
-        data: IToken;
-        value: string;
-        setValue: ((event: React.ChangeEvent<HTMLInputElement>) => void) | ((value: string) => void) | any;
-    }) => {
+const fieldDecimals = {
+    [FieldType.SWAPPED]: decimals.paymentToken,
+    [FieldType.RETRIEVED]: decimals.game,
+};
+
+export const Field = ({
+    type,
+    data,
+    value,
+    setValue,
+    updateSwapVariable,
+}: {
+    type: FieldType;
+    data: IToken;
+    value: string;
+    setValue: React.Dispatch<React.SetStateAction<string>>;
+    updateSwapVariable: (payload: string) => void;
+}) => {
+    const inputElement = useRef(null as unknown as any);
+
     const handleValueChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const payload = event.target.value;
 
-        if (payload === '0' || payload === '0.' || payload === '.' || payload === '') {
-            setValue(isNaN(payload as any) ? '0.' : '0');
-
-            return
+        if (fieldDecimals[type] === 0 && payload.includes('.')) {
+            return;
         }
 
-        if (isNaN(Number(payload)) || getBalanceDecimals(payload) > (type === TokenType.SWAPPED ? 6 : 0)) {
-            setValue('0');
+        if (payload === '0' || payload === '0.' || payload === '.' || payload === '') {
+            setValue(isNaN(payload as any) ? '0.' : '');
+            await updateSwapVariable('0');
+
+            return;
+        }
+
+        if (isNaN(Number(payload)) || getBalanceDecimals(payload) > fieldDecimals[type]) {
             return;
         }
 
         const output = safeSimplifyBalance(payload);
 
-        console.log('setting out', output)
         setValue(output);
+        await updateSwapVariable(output);
     };
 
     const handleValueMaxOut = async () => {
@@ -54,6 +67,7 @@ export const Field = (
         const output = safeSimplifyBalance(payload);
 
         setValue(output);
+        await updateSwapVariable(output);
     };
 
     /**
@@ -62,61 +76,83 @@ export const Field = (
     const handleValueHalve = async () => {
         const payload = data.value;
 
-        const value = ethers.utils.parseUnits(payload, 6);
+        const value = ethers.utils.parseUnits(payload, fieldDecimals[type]);
         const valueHalved = value.div(2);
-        const valueFormatted = ethers.utils.formatUnits(valueHalved, 6);
+        const valueFormatted = ethers.utils.formatUnits(valueHalved, fieldDecimals[type]);
 
         const output = safeSimplifyBalance(valueFormatted);
 
         setValue(output);
+        await updateSwapVariable(output);
     };
 
     return (
         <Flex
             minWidth="346px"
-            background="#12151A"
+            background={colors.backgroundAccent}
             borderRadius="8px"
             flexDirection="column"
             fontSize="12px"
             lineHeight="13px"
             padding="16px"
             gridGap="12px"
+            userSelect="none"
+            onClick={(event) => {
+                if (event.target !== event.currentTarget) {
+                    return;
+                }
+
+                inputElement.current.focus();
+            }}
         >
-            <Flex flexGrow="1" justifyContent="space-between" alignItems="center" gridGap="3em">
-                <Text letterSpacing="1%">{FieldText[type]}</Text>
+            <Flex flexGrow={1} justifyContent="space-between" alignItems="center" gridGap="3em">
+                <Text letterSpacing="1%">{fieldText[type]}</Text>
                 <Flex alignItems="center" gridGap="6px">
+                    <Text>Available</Text>
                     <Flex alignItems="center" gridGap="12px">
-                        {type === TokenType.SWAPPED && (
-                            <Flex gridGap="4px" textTransform="uppercase">
+                        <Text color={colors.main}>
+                            {prettyPrintBalance(data.value) || '…'} {data.symbol}
+                        </Text>
+                        {type === FieldType.SWAPPED && (
+                            <Flex gridGap="4px">
                                 <Button action={handleValueMaxOut}>
-                                    <Text>Max</Text>
+                                    <Text userSelect="none">Max</Text>
                                 </Button>
                                 <Button action={handleValueHalve}>
-                                    <Text>Half</Text>
+                                    <Text userSelect="none">Half</Text>
                                 </Button>
                             </Flex>
                         )}
                     </Flex>
                 </Flex>
             </Flex>
-            <Flex justifyContent="space-between" alignItems="center" flexDirection="row">
-                <TokenSelector data={data} />
-                <NumberInput value={value ?? ''} variant="unstyled" textAlign="right" fontWeight="600" fontSize="16px"
-                             lineHeight="20px" width="100%">
+            <Flex justifyContent="space-between" alignItems="center" flexDirection="row" gridGap="8px">
+                <NumberInput
+                    value={value}
+                    variant="unstyled"
+                    textAlign="right"
+                    fontWeight="600"
+                    fontSize="16px"
+                    lineHeight="20px"
+                    minWidth={`${value.length * 0.86}ch`}
+                    transition="all cubic-bezier(0.42, 0, 0, 1.11)"
+                    transitionDuration="1s"
+                    width="100%"
+                >
                     <NumberInputField
-                        placeholder="0"
+                        ref={inputElement}
+                        placeholder={'0'}
                         _placeholder={{ color: 'white' }}
-                        variant="unstyled"
                         textAlign="right"
                         fontWeight="600"
                         fontSize="16px"
                         lineHeight="20px"
                         padding="0"
                         onChange={handleValueChange}
-                        autoFocus={type === TokenType.SWAPPED}
+                        autoFocus={type === FieldType.SWAPPED}
                     />
                 </NumberInput>
             </Flex>
         </Flex>
-    )
-}
+    );
+};

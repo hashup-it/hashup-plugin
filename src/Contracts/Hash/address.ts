@@ -1,3 +1,3 @@
-import { envVariables } from '../../env'
+import { envVariables } from '../../env';
 
-export default envVariables.hashAddress
+export default envVariables.hashAddress;
