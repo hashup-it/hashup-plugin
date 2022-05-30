@@ -1,26 +1,26 @@
-import { chakra, VStack } from '@chakra-ui/react'
-import { EXPANSION_MODE } from '../../Hooks/expansionMode.enum'
-import { Navigation } from './Components/Navigation'
-import { AdditionalPanel } from './Components/AdditionalPanel'
-import { Body } from './Components/Body'
-import { Footer } from './Components/Footer'
-import { AccountCard } from './Components/Header/AccountCard'
-import { HashupCard } from './Components/Header/HashupCard'
-import { Header } from './Components/Header/Header'
-import { ExpansionProps, useExpansion } from '../../Hooks/useExpansion'
-import { WalletIcon } from '../../Components/Icons/WalletIcon'
-import { useBlockchainProvider } from '../../Providers/Blockchain/BlockchainProvider'
+import { chakra, VStack } from '@chakra-ui/react';
+import { EXPANSION_MODE } from '../../Hooks/expansionMode.enum';
+import { Navigation } from './Components/Navigation';
+import { AdditionalPanel } from './Components/AdditionalPanel';
+import { Body } from './Components/Body';
+import { Footer } from './Components/Footer';
+import { AccountCard } from './Components/Header/AccountCard';
+import { HashupCard } from './Components/Header/HashupCard';
+import { Header } from './Components/Header/Header';
+import { ExpansionProps, useExpansion } from '../../Hooks/useExpansion';
+import { WalletIcon } from '../../Components/Icons/WalletIcon';
+import { useBlockchainProvider } from '../../Providers/Blockchain/BlockchainProvider';
 
 const options: any = {
     // @ts-ignore
     [EXPANSION_MODE.DISCONNECTED]: (props: ExpansionProps) => {
-        const { login } = useBlockchainProvider()
+        const { login } = useBlockchainProvider();
         return (
             <Header onClick={login} cursor="pointer" borderBottomLeftRadius="10px">
                 <chakra.strong>Connect</chakra.strong>
                 <WalletIcon />
             </Header>
-        )
+        );
     },
     [EXPANSION_MODE.COLLAPSE]: (props: ExpansionProps) => (
         <Header onClick={props.onPartialExpand} cursor="pointer" borderBottomLeftRadius="10px" />
@@ -48,12 +48,12 @@ const options: any = {
             <AdditionalPanel />
             <Navigation {...expansionProps} />
         </>
-    )
-}
+    ),
+};
 
 export const Main = () => {
-    const expansionProps = useExpansion()
-    const { expansionMode } = expansionProps
+    const expansionProps = useExpansion();
+    const { expansionMode } = expansionProps;
 
-    return options[expansionMode](expansionProps)
-}
+    return options[expansionMode](expansionProps);
+};

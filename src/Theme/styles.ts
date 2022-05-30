@@ -7,6 +7,6 @@ export const styles = {
             // fontSize: '0.825rem',
             // fontWeight: '400',
             // color: theme.colors.gray[400],
-        }
-    }
-}
+        },
+    },
+};

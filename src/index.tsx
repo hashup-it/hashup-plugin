@@ -1,20 +1,20 @@
-import App from './App'
-import { customTheme } from './Theme/customTheme'
-import reportWebVitals from './reportWebVitals'
-import { ChakraProvider } from '@chakra-ui/react'
-import React from 'react'
-import ReactDOM from 'react-dom'
+import App from './App';
+import { customTheme } from './Theme/customTheme';
+import reportWebVitals from './reportWebVitals';
+import { ChakraProvider } from '@chakra-ui/react';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import { Fonts } from './Theme/Fonts'
-import { BlockchainProvider } from './Providers/Blockchain/BlockchainProvider'
-import { PLUGIN_MODE } from './Enums/pluginMode.enum'
-import { envVariables } from './env'
-import { GameProvider } from './Providers/GameProvider/GameProvider'
-import { MoralisProvider } from 'react-moralis'
+import { Fonts } from './Theme/Fonts';
+import { BlockchainProvider } from './Providers/Blockchain/BlockchainProvider';
+import { PLUGIN_MODE } from './Enums/pluginMode.enum';
+import { envVariables } from './env';
+import { GameProvider } from './Providers/GameProvider/GameProvider';
+import { MoralisProvider } from 'react-moralis';
 
 export interface PluginProps {
-    cartridgeAddress: string,
-    mode?: PLUGIN_MODE
+    cartridgeAddress: string;
+    mode?: PLUGIN_MODE;
 }
 
 export const SimpleHashupPlugin = ({ cartridgeAddress, mode = PLUGIN_MODE.GAMEXPLORER }: PluginProps) => (
@@ -24,21 +24,20 @@ export const SimpleHashupPlugin = ({ cartridgeAddress, mode = PLUGIN_MODE.GAMEXP
             <App mode={mode} />
         </BlockchainProvider>
     </GameProvider>
-)
+);
 
 const HashupPlugin = ({ cartridgeAddress, mode = PLUGIN_MODE.WEBSITE }: PluginProps) => (
     <ChakraProvider theme={customTheme}>
         <SimpleHashupPlugin cartridgeAddress={cartridgeAddress} mode={mode} />
     </ChakraProvider>
-)
+);
 
 const RootDomCartridge = () => {
-    const rootEl = document.getElementById('root')
-    const cartridgeAddress = rootEl?.getAttribute('data-cartridge') || envVariables.cartridgeAddress
+    const rootEl = document.getElementById('root');
+    const cartridgeAddress = rootEl?.getAttribute('data-cartridge') || envVariables.cartridgeAddress;
 
-    return <HashupPlugin cartridgeAddress={cartridgeAddress}
-                         mode={envVariables.pluginMode as PLUGIN_MODE} />
-}
+    return <HashupPlugin cartridgeAddress={cartridgeAddress} mode={envVariables.pluginMode as PLUGIN_MODE} />;
+};
 
 ReactDOM.render(
     <React.StrictMode>
@@ -47,14 +46,14 @@ ReactDOM.render(
             appId="Dg8FV5HhjilWPbXojAUaVP6jhuYCizeSbJY1zTsW"
         >
             <RootDomCartridge />
-        </MoralisProvider>,
+        </MoralisProvider>
     </React.StrictMode>,
-    document.getElementById('root')
-)
+    document.getElementById('root'),
+);
 
-export default HashupPlugin
+export default HashupPlugin;
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals()
+reportWebVitals();

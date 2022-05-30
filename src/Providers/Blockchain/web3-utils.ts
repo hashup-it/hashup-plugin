@@ -1,12 +1,12 @@
 export const isWeb3 = () => {
     // @ts-ignore
-    return typeof window.ethereum !== 'undefined'
-}
+    return typeof window.ethereum !== 'undefined';
+};
 
 export const isMetaMask = () => {
     // @ts-ignore
-    return !!window.ethereum.isMetaMask
-}
+    return !!window.ethereum.isMetaMask;
+};
 
 // return account if connected
 export const getAccounts = async () => {
@@ -14,12 +14,12 @@ export const getAccounts = async () => {
     try {
         // @ts-ignore
         return window.ethereum.request({
-            method: 'eth_accounts'
-        })
+            method: 'eth_accounts',
+        });
     } catch (e) {
-        throw e
+        throw e;
     }
-}
+};
 
 // login attempt, is succcess return array of account
 export const loginToMetaMask = async () => {
@@ -27,12 +27,12 @@ export const loginToMetaMask = async () => {
     try {
         // @ts-ignore
         return window.ethereum.request({
-            method: 'eth_requestAccounts'
-        })
+            method: 'eth_requestAccounts',
+        });
     } catch (e) {
-        throw e
+        throw e;
     }
-}
+};
 
 export const networkChainParams: any = {
     BSC_MAINNET: {
@@ -41,10 +41,10 @@ export const networkChainParams: any = {
         nativeCurrency: {
             name: 'Binance Coin',
             symbol: 'BNB',
-            decimals: 18
+            decimals: 18,
         },
         rpcUrls: ['https://bsc-dataseed.binance.org/'],
-        blockExplorerUrls: ['https://bscscan.com']
+        blockExplorerUrls: ['https://bscscan.com'],
     },
     BSC_TESTNET: {
         chainId: '0x61',
@@ -52,26 +52,26 @@ export const networkChainParams: any = {
         nativeCurrency: {
             name: 'Test Binance Coin',
             symbol: 'tBNB',
-            decimals: 18
+            decimals: 18,
         },
         rpcUrls: ['https://data-seed-prebsc-2-s3.binance.org:8545/'],
-        blockExplorerUrls: ['https://testnet.bscscan.com']
-    }
-}
+        blockExplorerUrls: ['https://testnet.bscscan.com'],
+    },
+};
 
 export const chainIdtoName = (chainId: number) => {
     switch (chainId) {
         case 1:
-            return 'Mainnet'
+            return 'Mainnet';
         case 3:
-            return 'Ropsten'
+            return 'Ropsten';
         case 4:
-            return 'Rinkeby'
+            return 'Rinkeby';
         case 42:
-            return 'Kovan'
+            return 'Kovan';
         case 5:
-            return 'Goerli'
+            return 'Goerli';
         default:
-            return 'unknown'
+            return 'unknown';
     }
-}
+};
