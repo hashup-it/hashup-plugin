@@ -18,7 +18,7 @@ export const Body = () => {
         useBlockchainProvider();
     const { data: game } = useGame();
     /** Payment token total */
-    const [amount, setAmount] = useState<string>('');
+    const [_, setAmount] = useState<string>('');
 
     const [valueSwapped, setValueSwapped] = useState('');
     const [valueRetrieved, setValueRetrieved] = useState('');
